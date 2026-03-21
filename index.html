@@ -3,445 +3,352 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nesken — Engineering the Future</title>
-<meta name="description" content="Software that thinks. Systems that never sleep.">
+<title>Nesken — Software & AI Engineering</title>
+<meta name="description" content="Commercial software, AI agents, and engineering tools.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#050505;--surface:#0c0c0c;--card:#0f0f0f;
-  --border:rgba(255,255,255,.05);--border-h:rgba(255,255,255,.1);
-  --t1:#fafafa;--t2:rgba(255,255,255,.6);--t3:rgba(255,255,255,.3);
-  --accent:#ff6b2b;--accent2:#ff8f5c;--blue:#3b82f6;--violet:#8b5cf6;--emerald:#10b981;
-  --glow:rgba(255,107,43,.08);
+  --bg:#000;--t1:#fff;--t2:rgba(255,255,255,.7);--t3:rgba(255,255,255,.4);
+  --border:rgba(255,255,255,.08);
 }
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden;line-height:1.6}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-
-/* ═══ CANVAS / GRAIN ═══ */
-.grain{position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.35;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E")}
-
-.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;will-change:transform}
-.orb-1{width:800px;height:800px;background:radial-gradient(circle,rgba(255,107,43,.06),transparent 70%);top:-300px;left:-200px;animation:float 20s ease-in-out infinite}
-.orb-2{width:600px;height:600px;background:radial-gradient(circle,rgba(59,130,246,.04),transparent 70%);bottom:-100px;right:-200px;animation:float 25s ease-in-out infinite reverse}
-.orb-3{width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,.03),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:float 30s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-40px)}50%{transform:translate(-20px,30px)}75%{transform:translate(40px,20px)}}
-
-/* ═══ LAYOUT ═══ */
-.wrap{max-width:1200px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
-section{padding:120px 0}
+img{display:block;max-width:100%}
 
 /* ═══ NAV ═══ */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 0;transition:all .3s}
-nav.scrolled{background:rgba(5,5,5,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:14px 0}
-nav .wrap{display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:17px;font-weight:700;letter-spacing:-.5px}
-.logo em{font-style:normal;color:var(--accent);font-weight:800}
-.nav-r{display:flex;align-items:center;gap:36px}
-.nav-r a{font-size:13px;color:var(--t3);font-weight:500;transition:color .2s;letter-spacing:.3px}
-.nav-r a:hover{color:var(--t1)}
-.nav-cta{background:var(--accent)!important;color:#fff!important;padding:8px 18px;border-radius:8px;font-weight:600!important;transition:all .2s!important}
-.nav-cta:hover{box-shadow:0 0 24px var(--glow);transform:translateY(-1px)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .4s}
+nav.scrolled{background:rgba(0,0,0,.8);backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:16px 48px;display:flex;justify-content:space-between;align-items:center}
+.nav-logo{font-size:20px;font-weight:800;letter-spacing:-1px}
+.nav-logo span{background:linear-gradient(135deg,#ff6b2b,#ff9a5c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:13px;font-weight:500;color:var(--t3);transition:color .2s}
+.nav-links a:hover{color:var(--t1)}
+.nav-cta{background:#fff!important;color:#000!important;padding:8px 20px;border-radius:100px;font-weight:600!important}
+.nav-cta:hover{opacity:.9}
 
 /* ═══ HERO ═══ */
-.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:28px}
-.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--accent)}
-.hero h1{font-size:clamp(40px,5.5vw,72px);font-weight:800;letter-spacing:-2.5px;line-height:1.05;margin-bottom:24px}
-.hero h1 span{display:block;background:linear-gradient(135deg,var(--t1) 0%,var(--t2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero h1 .glow-text{background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 40%,var(--blue) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero-desc{font-size:17px;color:var(--t2);line-height:1.8;max-width:480px;margin-bottom:40px}
-.hero-btns{display:flex;gap:14px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:12px;font-size:14px;font-weight:600;transition:all .25s;border:none;cursor:pointer}
-.btn-glow{background:linear-gradient(135deg,var(--accent),#e85d1a);color:#fff;box-shadow:0 4px 20px rgba(255,107,43,.2)}
-.btn-glow:hover{box-shadow:0 8px 40px rgba(255,107,43,.35);transform:translateY(-2px)}
-.btn-ghost{background:rgba(255,255,255,.04);color:var(--t2);border:1px solid var(--border)}
-.btn-ghost:hover{border-color:var(--border-h);color:var(--t1);background:rgba(255,255,255,.06)}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:140px 48px 100px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:1000px;height:1000px;background:radial-gradient(circle,rgba(255,107,43,.08) 0%,transparent 60%);pointer-events:none}
+.hero-eyebrow{font-size:14px;font-weight:600;color:var(--t3);letter-spacing:4px;text-transform:uppercase;margin-bottom:28px}
+.hero h1{font-size:clamp(52px,7vw,96px);font-weight:900;letter-spacing:-4px;line-height:.95;margin-bottom:28px}
+.hero h1 .line{display:block}
+.hero h1 .gradient{background:linear-gradient(135deg,#ff6b2b 0%,#ff9a5c 30%,#3b82f6 70%,#8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:shimmer 8s linear infinite}
+@keyframes shimmer{0%{background-position:0% center}100%{background-position:200% center}}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--t2);max-width:600px;line-height:1.7;margin-bottom:48px}
+.hero-btns{display:flex;gap:16px;margin-bottom:80px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:600;transition:all .3s;border:none;cursor:pointer}
+.btn-white{background:#fff;color:#000}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(255,255,255,.15)}
+.btn-outline{background:transparent;color:var(--t1);border:1px solid rgba(255,255,255,.2)}
+.btn-outline:hover{border-color:rgba(255,255,255,.5);transform:translateY(-2px)}
 
-/* Hero visual */
-.hero-visual{position:relative;height:480px}
-.terminal{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5);position:absolute;width:100%;height:100%}
-.terminal-bar{display:flex;gap:7px;padding:14px 18px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
-.terminal-dot{width:11px;height:11px;border-radius:50%}
-.terminal-dot:nth-child(1){background:#ff5f57}
-.terminal-dot:nth-child(2){background:#febc2e}
-.terminal-dot:nth-child(3){background:#28c840}
-.terminal-title{margin-left:12px;font-size:12px;color:var(--t3);font-family:'JetBrains Mono',monospace}
-.terminal-body{padding:20px 22px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2;color:var(--t3)}
-.terminal-body .g{color:var(--emerald)}.terminal-body .o{color:var(--accent)}.terminal-body .b{color:var(--blue)}.terminal-body .v{color:var(--violet)}.terminal-body .w{color:var(--t1)}
-.cursor{display:inline-block;width:8px;height:16px;background:var(--accent);animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:2px}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+/* Scroll indicator */
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--t3);font-size:11px;letter-spacing:2px;text-transform:uppercase;animation:float-y 2s ease-in-out infinite}
+@keyframes float-y{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+.scroll-arrow{width:1px;height:40px;background:linear-gradient(to bottom,var(--t3),transparent)}
 
-/* ═══ METRICS ═══ */
-.metrics{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 0}
-.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
-.metric{text-align:center}
-.metric-val{font-size:48px;font-weight:800;letter-spacing:-3px;background:linear-gradient(180deg,var(--t1),var(--t3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.metric-label{font-size:13px;color:var(--t3);margin-top:4px;font-weight:500}
+/* ═══ PRODUCT SECTIONS ═══ */
+.product-section{padding:120px 0;position:relative;overflow:hidden}
+.product-inner{max-width:1400px;margin:0 auto;padding:0 48px}
+.product-label{font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px}
+.product-title{font-size:clamp(36px,5vw,64px);font-weight:800;letter-spacing:-2.5px;line-height:1.05;margin-bottom:20px;max-width:700px}
+.product-desc{font-size:17px;color:var(--t2);line-height:1.8;max-width:520px;margin-bottom:36px}
+.product-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ptag{font-size:12px;font-weight:500;padding:6px 16px;border-radius:100px;background:rgba(255,255,255,.06);color:var(--t3);border:1px solid rgba(255,255,255,.06)}
+.product-cta{font-size:14px;font-weight:600;color:var(--t1);display:inline-flex;align-items:center;gap:8px;transition:gap .2s}
+.product-cta:hover{gap:14px}
+.product-cta .arrow{transition:transform .2s}
+.product-cta:hover .arrow{transform:translateX(4px)}
 
-/* ═══ PRODUCTS ═══ */
-.section-header{margin-bottom:64px}
-.section-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:14px}
-.section-h{font-size:clamp(32px,4vw,48px);font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:16px}
-.section-p{font-size:16px;color:var(--t2);max-width:500px;line-height:1.7}
+/* Screenshot container */
+.product-screenshot{margin-top:64px;position:relative;perspective:1500px}
+.screenshot-wrap{position:relative;border-radius:16px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.06);transform:rotateX(2deg);transition:transform .6s ease}
+.product-section:hover .screenshot-wrap{transform:rotateX(0deg)}
+.screenshot-img{width:100%;height:auto;display:block}
+.screenshot-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,var(--ps-color1,#111) 0%,var(--ps-color2,#0a0a0a) 100%);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t3);letter-spacing:2px}
+.screenshot-glow{position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:80%;height:100%;border-radius:50%;filter:blur(100px);pointer-events:none;opacity:.4}
 
-/* Product showcase */
-.product-showcase{display:flex;flex-direction:column;gap:24px}
-.product-card{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .4s;position:relative}
-.product-card:hover{border-color:var(--border-h);box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.product-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,107,43,.2),transparent);opacity:0;transition:opacity .4s}
-.product-card:hover::after{opacity:1}
-.product-info{padding:48px;display:flex;flex-direction:column;justify-content:center}
-.product-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;width:fit-content;margin-bottom:20px}
-.badge-live{background:rgba(16,185,129,.1);color:var(--emerald)}
-.badge-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--emerald);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.badge-dev{background:rgba(59,130,246,.1);color:var(--blue)}
-.badge-poc{background:rgba(255,255,255,.04);color:var(--t3)}
-.badge-active{background:rgba(139,92,246,.1);color:var(--violet)}
-.product-name{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:12px}
-.product-desc{font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:24px}
-.product-stack{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px}
-.chip{font-size:11px;padding:5px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--t3);font-weight:500}
-.product-metrics{display:flex;gap:32px}
-.product-metric{display:flex;flex-direction:column}
-.product-metric strong{font-size:20px;font-weight:700;color:var(--t1)}
-.product-metric span{font-size:11px;color:var(--t3);margin-top:2px}
+/* Section color themes */
+.ps-cmxpro{background:linear-gradient(180deg,#000 0%,#0d0800 40%,#1a0f00 100%)}
+.ps-cmxpro .product-label{color:#ff6b2b}
+.ps-cmxpro .screenshot-glow{background:rgba(255,107,43,.12)}
+.ps-cmxpro .screenshot-wrap{border-color:rgba(255,107,43,.1)}
 
-/* Product visual */
-.product-visual{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.02),rgba(255,255,255,.01));display:flex;align-items:center;justify-content:center;min-height:400px;border-left:1px solid var(--border);overflow:hidden;perspective:1200px}
-.mockup-img{width:110%;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);transform:rotateY(-8deg) rotateX(2deg) scale(.95);transition:transform .5s ease,box-shadow .5s ease}
-.product-card:hover .mockup-img{transform:rotateY(-3deg) rotateX(1deg) scale(.98);box-shadow:0 32px 100px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.1)}
-.mockup{width:85%;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.5);border:1px solid var(--border);background:var(--surface)}
-.mockup-bar{height:32px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:6px}
-.mockup-bar span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1)}
-.mockup-body{padding:20px;min-height:200px}
+.ps-fluxo{background:linear-gradient(180deg,#0d0800 0%,#001a0e 40%,#00120a 100%)}
+.ps-fluxo .product-label{color:#10b981}
+.ps-fluxo .screenshot-glow{background:rgba(16,185,129,.12)}
+.ps-fluxo .screenshot-wrap{border-color:rgba(16,185,129,.1)}
 
-/* Dashboard mockup */
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.dash-card{background:rgba(255,255,255,.03);border-radius:8px;padding:14px;border:1px solid rgba(255,255,255,.04)}
-.dash-label{font-size:10px;color:var(--t3);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
-.dash-val{font-size:22px;font-weight:700;letter-spacing:-1px}
-.dash-val.up{color:var(--emerald)}
-.dash-val.accent{color:var(--accent)}
-.dash-val.blue{color:var(--blue)}
-.dash-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.06);margin-top:8px;overflow:hidden}
-.dash-bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
-.dash-bar-fill.g{background:var(--emerald);width:78%}
-.dash-bar-fill.o{background:var(--accent);width:62%}
-.dash-bar-fill.b{background:var(--blue);width:91%}
-.dash-bar-fill.v{background:var(--violet);width:45%}
+.ps-agents{background:linear-gradient(180deg,#00120a 0%,#000a1a 40%,#000814 100%)}
+.ps-agents .product-label{color:#3b82f6}
+.ps-agents .screenshot-glow{background:rgba(59,130,246,.12)}
+.ps-agents .screenshot-wrap{border-color:rgba(59,130,246,.1)}
 
-/* Chart mockup */
-.chart-mock{display:flex;align-items:flex-end;gap:4px;height:120px;padding-top:10px}
-.chart-bar{flex:1;border-radius:3px 3px 0 0;transition:height .6s ease;min-width:8px}
+.ps-bim{background:linear-gradient(180deg,#000814 0%,#0a0014 40%,#0d0019 100%)}
+.ps-bim .product-label{color:#8b5cf6}
+.ps-bim .screenshot-glow{background:rgba(139,92,246,.12)}
+.ps-bim .screenshot-wrap{border-color:rgba(139,92,246,.1)}
 
-/* Reverse card */
-.product-card.reverse{grid-template-columns:1fr 1fr;direction:rtl}
-.product-card.reverse>*{direction:ltr}
-.product-card.reverse .product-visual{border-left:none;border-right:1px solid var(--border)}
-.product-card.reverse .mockup-img{transform:rotateY(8deg) rotateX(2deg) scale(.95)}
-.product-card.reverse:hover .mockup-img{transform:rotateY(3deg) rotateX(1deg) scale(.98)}
+/* ═══ MORE PRODUCTS ═══ */
+.more-section{padding:120px 0;background:linear-gradient(180deg,#0d0019 0%,#000 100%)}
+.more-inner{max-width:1400px;margin:0 auto;padding:0 48px}
+.more-header{text-align:center;margin-bottom:64px}
+.more-h{font-size:clamp(32px,4vw,48px);font-weight:800;letter-spacing:-2px;margin-bottom:12px}
+.more-p{color:var(--t3);font-size:16px}
+.more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.more-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:20px;padding:36px;transition:all .3s;position:relative;overflow:hidden}
+.more-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--card-accent,rgba(255,255,255,.02)),transparent);opacity:0;transition:opacity .3s}
+.more-card:hover{border-color:rgba(255,255,255,.12);transform:translateY(-4px)}.more-card:hover::before{opacity:1}
+.more-icon{font-size:32px;margin-bottom:20px;display:block}
+.more-name{font-size:20px;font-weight:700;letter-spacing:-.5px;margin-bottom:10px;position:relative}
+.more-desc{font-size:14px;color:var(--t3);line-height:1.7;position:relative}
+.more-badge{position:absolute;top:24px;right:24px;font-size:10px;font-weight:600;padding:4px 12px;border-radius:100px;text-transform:uppercase;letter-spacing:.5px}
+.mb-production{background:rgba(16,185,129,.1);color:#10b981}
+.mb-private{background:rgba(255,255,255,.04);color:var(--t3)}
+.mb-poc{background:rgba(139,92,246,.1);color:#8b5cf6}
+.mb-online{background:rgba(59,130,246,.1);color:#3b82f6}
 
-/* ═══ SMALLER PROJECTS ═══ */
-.projects-small{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
-.project-sm{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all .3s}
-.project-sm:hover{border-color:var(--border-h);transform:translateY(-2px)}
-.project-sm-icon{font-size:24px;margin-bottom:14px;display:block}
-.project-sm-name{font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.3px}
-.project-sm-desc{font-size:13px;color:var(--t3);line-height:1.6}
-.project-sm-foot{display:flex;gap:6px;margin-top:16px}
-
-/* ═══ STACK ═══ */
-.stack-flow{display:flex;flex-wrap:wrap;gap:10px}
-.stack-tag{display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--card);border:1px solid var(--border);border-radius:12px;font-size:13px;font-weight:500;color:var(--t2);transition:all .2s}
-.stack-tag:hover{border-color:var(--border-h);color:var(--t1);transform:translateY(-1px)}
-.stack-dot{width:8px;height:8px;border-radius:50%}
+/* ═══ NUMBERS ═══ */
+.numbers{padding:100px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.numbers-inner{max-width:1400px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:repeat(4,1fr);gap:48px}
+.num{text-align:center}
+.num-val{font-size:clamp(40px,5vw,64px);font-weight:900;letter-spacing:-3px;line-height:1}
+.num-label{font-size:14px;color:var(--t3);margin-top:8px;font-weight:500}
 
 /* ═══ CTA ═══ */
-.cta-section{text-align:center;padding:140px 0}
-.cta-h{font-size:clamp(36px,5vw,56px);font-weight:800;letter-spacing:-2px;margin-bottom:16px;line-height:1.1}
-.cta-p{font-size:17px;color:var(--t2);margin-bottom:40px;max-width:440px;margin-left:auto;margin-right:auto}
-.cta-links{display:flex;justify-content:center;gap:32px;margin-top:48px}
-.cta-links a{font-size:13px;color:var(--t3);transition:color .2s;font-weight:500}
+.cta{padding:160px 48px;text-align:center;position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;bottom:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(255,107,43,.06) 0%,transparent 60%);pointer-events:none}
+.cta-h{font-size:clamp(40px,6vw,72px);font-weight:900;letter-spacing:-3px;line-height:1;margin-bottom:20px}
+.cta-p{font-size:18px;color:var(--t2);margin-bottom:48px}
+.cta-links{display:flex;justify-content:center;gap:40px;margin-top:60px}
+.cta-links a{font-size:14px;color:var(--t3);font-weight:500;transition:color .2s}
 .cta-links a:hover{color:var(--t1)}
 
 /* ═══ FOOTER ═══ */
-footer{border-top:1px solid var(--border);padding:32px 0}
-footer .wrap{display:flex;justify-content:space-between;align-items:center}
+footer{border-top:1px solid var(--border);padding:28px 0}
+.footer-inner{max-width:1400px;margin:0 auto;padding:0 48px;display:flex;justify-content:space-between;align-items:center}
 footer span{font-size:12px;color:var(--t3)}
 
-/* ═══ SCROLL REVEAL ═══ */
-[data-reveal]{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
-[data-reveal].shown{opacity:1;transform:none}
+/* ═══ REVEAL ═══ */
+[data-r]{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+[data-r].v{opacity:1;transform:none}
+[data-r="d1"]{transition-delay:.1s}
+[data-r="d2"]{transition-delay:.2s}
+[data-r="d3"]{transition-delay:.3s}
 
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:900px){
-  .hero-grid,.product-card,.product-card.reverse{grid-template-columns:1fr}
-  .hero-visual{height:320px;margin-top:40px}
-  .metrics-grid{grid-template-columns:repeat(2,1fr);gap:24px}
-  .projects-small{grid-template-columns:1fr}
-  .product-visual{min-height:240px;border-left:none!important;border-right:none!important;border-top:1px solid var(--border)}
-  .product-card.reverse{direction:ltr}
-  .nav-r a:not(.nav-cta){display:none}
+  .nav-inner{padding:16px 24px}
+  .nav-links a:not(.nav-cta){display:none}
+  .hero{padding:120px 24px 80px}
+  .hero-btns{flex-direction:column;align-items:center}
+  .product-inner,.more-inner,.numbers-inner,.footer-inner{padding:0 24px}
+  .more-grid{grid-template-columns:1fr}
+  .numbers-inner{grid-template-columns:repeat(2,1fr);gap:32px}
+  .product-section{padding:80px 0}
+  .cta{padding:100px 24px}
 }
 </style>
 </head>
 <body>
 
-<div class="grain"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-
+<!-- NAV -->
 <nav id="nav">
-  <div class="wrap">
-    <a href="#" class="logo">nesken<em>.dev</em></a>
-    <div class="nav-r">
-      <a href="#products">Products</a>
-      <a href="#stack">Stack</a>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">nesken<span>.dev</span></a>
+    <div class="nav-links">
+      <a href="#cmxpro">Products</a>
+      <a href="#numbers">About</a>
       <a href="mailto:nesken@fluxo.eng.br" class="nav-cta">Contact</a>
     </div>
   </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
+<!-- HERO -->
 <section class="hero">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div data-reveal>
-        <div class="hero-eyebrow">Software & AI Engineering</div>
-        <h1>
-          <span>Software that</span>
-          <span class="glow-text">thinks.</span>
-          <span>Systems that</span>
-          <span class="glow-text">never sleep.</span>
-        </h1>
-        <p class="hero-desc">I build commercial software, AI agent infrastructure, and engineering tools. From HVAC calculations to autonomous content pipelines — if it can be automated, it will be.</p>
-        <div class="hero-btns">
-          <a href="#products" class="btn btn-glow">Explore Products ↓</a>
-          <a href="https://github.com/neskenfrederico-gif" class="btn btn-ghost" target="_blank">GitHub →</a>
-        </div>
-      </div>
-      <div class="hero-visual" data-reveal>
-        <div class="terminal">
-          <div class="terminal-bar">
-            <div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div>
-            <span class="terminal-title">~/nesken/agents</span>
-          </div>
-          <div class="terminal-body">
-            <div><span class="g">→</span> <span class="w">17 cron jobs</span> active</div>
-            <div><span class="g">→</span> <span class="w">4 AI agents</span> online</div>
-            <div><span class="g">→</span> <span class="w">uptime:</span> <span class="o">52 days</span></div>
-            <div>&nbsp;</div>
-            <div><span class="b">$</span> openclaw status</div>
-            <div>&nbsp;&nbsp;<span class="g">✓</span> trend-researcher &nbsp;<span class="v">07:00</span></div>
-            <div>&nbsp;&nbsp;<span class="g">✓</span> crypto-brief &nbsp;&nbsp;&nbsp;&nbsp;<span class="v">09:00</span></div>
-            <div>&nbsp;&nbsp;<span class="g">✓</span> builder-story &nbsp;&nbsp;&nbsp;<span class="v">11:00</span></div>
-            <div>&nbsp;&nbsp;<span class="g">✓</span> x-auto-reply &nbsp;&nbsp;&nbsp;&nbsp;<span class="v">*/30m</span></div>
-            <div>&nbsp;&nbsp;<span class="g">✓</span> ig-daily-quote &nbsp;&nbsp;<span class="v">12:00</span></div>
-            <div>&nbsp;&nbsp;<span class="g">✓</span> email-monitor &nbsp;&nbsp;&nbsp;<span class="v">*/3h</span></div>
-            <div>&nbsp;</div>
-            <div><span class="b">$</span> <span class="cursor"></span></div>
-          </div>
-        </div>
+  <div class="hero-eyebrow" data-r>Software & AI Engineering</div>
+  <h1 data-r="d1">
+    <span class="line">Software that</span>
+    <span class="line gradient">thinks.</span>
+    <span class="line">Systems that</span>
+    <span class="line gradient">never sleep.</span>
+  </h1>
+  <p class="hero-sub" data-r="d2">Commercial software, autonomous AI agents, and engineering tools — built by an engineer who automates everything.</p>
+  <div class="hero-btns" data-r="d3">
+    <a href="#cmxpro" class="btn btn-white">Explore Products</a>
+    <a href="https://github.com/neskenfrederico-gif" target="_blank" class="btn btn-outline">GitHub ↗</a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ═══ CMXPRO ═══ -->
+<section class="product-section ps-cmxpro" id="cmxpro">
+  <div class="product-inner">
+    <div class="product-label" data-r>CMXPro Suite</div>
+    <h2 class="product-title" data-r>HVAC engineering,<br>reimagined.</h2>
+    <p class="product-desc" data-r>Enterprise-grade HVAC software. Mobile for field work, web for management, desktop for heavy calculations. Migrating 250K+ lines of legacy into a modern multi-platform stack.</p>
+    <div class="product-tags" data-r>
+      <span class="ptag">React Native</span>
+      <span class="ptag">Next.js</span>
+      <span class="ptag">FastAPI</span>
+      <span class="ptag">Tauri</span>
+      <span class="ptag">Python</span>
+    </div>
+    <a href="#" class="product-cta" data-r>Learn more <span class="arrow">→</span></a>
+    <div class="product-screenshot" data-r>
+      <div class="screenshot-glow"></div>
+      <div class="screenshot-wrap">
+        <img src="mockups/cmxpro.png" alt="CMXPro Suite" class="screenshot-img">
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ METRICS ═══ -->
-<div class="metrics">
-  <div class="wrap">
-    <div class="metrics-grid">
-      <div class="metric" data-reveal><div class="metric-val">8+</div><div class="metric-label">Active Products</div></div>
-      <div class="metric" data-reveal><div class="metric-val">250K</div><div class="metric-label">Lines of Code</div></div>
-      <div class="metric" data-reveal><div class="metric-val">24/7</div><div class="metric-label">Agent Uptime</div></div>
-      <div class="metric" data-reveal><div class="metric-val">4</div><div class="metric-label">Autonomous Channels</div></div>
+<!-- ═══ FLUXO ═══ -->
+<section class="product-section ps-fluxo">
+  <div class="product-inner">
+    <div class="product-label" data-r>Fluxo Orçamentos</div>
+    <h2 class="product-title" data-r>Budgets, powered<br>by intelligence.</h2>
+    <p class="product-desc" data-r>AI-powered budget management used daily in production. Automates proposal generation, cost analysis, and client tracking with Claude AI integration. 3x faster than manual.</p>
+    <div class="product-tags" data-r>
+      <span class="ptag">Next.js</span>
+      <span class="ptag">React</span>
+      <span class="ptag">Firebase</span>
+      <span class="ptag">Claude AI</span>
     </div>
-  </div>
-</div>
-
-<!-- ═══ PRODUCTS ═══ -->
-<section id="products">
-  <div class="wrap">
-    <div class="section-header" data-reveal>
-      <div class="section-tag">Products</div>
-      <h2 class="section-h">Built to solve<br>real problems.</h2>
-      <p class="section-p">Every product started as a personal need. From managing HVAC budgets to automating entire content workflows.</p>
-    </div>
-
-    <div class="product-showcase">
-
-      <!-- CMXPro Suite -->
-      <div class="product-card" data-reveal>
-        <div class="product-info">
-          <div class="product-badge badge-dev">In Development</div>
-          <div class="product-name">CMXPro Suite</div>
-          <p class="product-desc">Enterprise HVAC engineering software. Multi-platform: mobile for field work, web for management, desktop for heavy calculations. Migrating 250K lines of legacy Python into a modern stack.</p>
-          <div class="product-stack">
-            <span class="chip">React Native</span><span class="chip">Next.js</span><span class="chip">FastAPI</span><span class="chip">Tauri</span><span class="chip">Python</span>
-          </div>
-          <div class="product-metrics">
-            <div class="product-metric"><strong>24</strong><span>Mobile Screens</span></div>
-            <div class="product-metric"><strong>15+</strong><span>Web Pages</span></div>
-            <div class="product-metric"><strong>40</strong><span>API Endpoints</span></div>
-          </div>
-        </div>
-        <div class="product-visual">
-          <img src="mockups/cmxpro.png" alt="CMXPro Suite Dashboard" class="mockup-img">
-        </div>
-      </div>
-
-      <!-- Fluxo Orçamentos -->
-      <div class="product-card reverse" data-reveal>
-        <div class="product-info">
-          <div class="product-badge badge-live"><span></span>Production</div>
-          <div class="product-name">Fluxo Orçamentos</div>
-          <p class="product-desc">AI-powered budget management. Used daily at Siqueira & Blanco engineering. Automates proposal generation, cost analysis, and client tracking with Anthropic AI integration.</p>
-          <div class="product-stack">
-            <span class="chip">Next.js</span><span class="chip">React</span><span class="chip">Firebase</span><span class="chip">Claude AI</span>
-          </div>
-          <div class="product-metrics">
-            <div class="product-metric"><strong>627</strong><span>Files</span></div>
-            <div class="product-metric"><strong>R$2.4M</strong><span>Managed</span></div>
-            <div class="product-metric"><strong>3x</strong><span>Faster Proposals</span></div>
-          </div>
-        </div>
-        <div class="product-visual">
-          <img src="mockups/fluxo.png" alt="Fluxo Orçamentos Dashboard" class="mockup-img">
-        </div>
-      </div>
-
-      <!-- AI Agent Infra -->
-      <div class="product-card" data-reveal>
-        <div class="product-info">
-          <div class="product-badge badge-live"><span></span>Running 24/7</div>
-          <div class="product-name">AI Agent Infrastructure</div>
-          <p class="product-desc">Autonomous system on a VPS. Manages 4 YouTube channels, monitors email, tracks crypto, posts on social media, auto-replies to X mentions — zero human intervention.</p>
-          <div class="product-stack">
-            <span class="chip">OpenClaw</span><span class="chip">Claude</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">ElevenLabs</span><span class="chip">Gemini</span>
-          </div>
-          <div class="product-metrics">
-            <div class="product-metric"><strong>17</strong><span>Cron Jobs</span></div>
-            <div class="product-metric"><strong>52d</strong><span>Uptime</span></div>
-            <div class="product-metric"><strong>$40</strong><span>Monthly Infra</span></div>
-          </div>
-        </div>
-        <div class="product-visual">
-          <div class="mockup">
-            <div class="mockup-bar"><span></span><span></span><span></span></div>
-            <div class="mockup-body" style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;color:var(--t3)">
-              <div><span style="color:var(--emerald)">●</span> briefing-matinal <span style="float:right;color:var(--emerald)">OK 2m ago</span></div>
-              <div><span style="color:var(--emerald)">●</span> crypto-brief <span style="float:right;color:var(--emerald)">OK 14m ago</span></div>
-              <div><span style="color:var(--emerald)">●</span> x-mentions-check <span style="float:right;color:var(--emerald)">OK 3m ago</span></div>
-              <div><span style="color:var(--emerald)">●</span> ig-daily-quote <span style="float:right;color:var(--accent)">next 2h</span></div>
-              <div><span style="color:var(--emerald)">●</span> email-fluxo-check <span style="float:right;color:var(--emerald)">OK 47m ago</span></div>
-              <div><span style="color:var(--emerald)">●</span> backup-gdrive <span style="float:right;color:var(--emerald)">OK 8h ago</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Smaller projects -->
-    <div class="projects-small">
-      <div class="project-sm" data-reveal>
-        <span class="project-sm-icon">🏗️</span>
-        <div class="project-sm-name">CMXPro-BIM</div>
-        <p class="project-sm-desc">Revit plugin for HVAC duct design. Specialized in octagonal MPU ducts — a niche no one else covers.</p>
-        <div class="project-sm-foot"><span class="chip">C#</span><span class="chip">.NET</span><span class="chip">Revit API</span></div>
-      </div>
-      <div class="project-sm" data-reveal>
-        <span class="project-sm-icon">🏥</span>
-        <div class="project-sm-name">SimPrótese</div>
-        <p class="project-sm-desc">B2B platform for plastic surgeons. AI-powered surgical simulation and planning tools.</p>
-        <div class="project-sm-foot"><span class="chip">AI</span><span class="chip">Computer Vision</span></div>
-      </div>
-      <div class="project-sm" data-reveal>
-        <span class="project-sm-icon">🌡️</span>
-        <div class="project-sm-name">HVAC Tools</div>
-        <p class="project-sm-desc">Open-source engineering calculators. Psychrometric charts, duct sizing, load calculations.</p>
-        <div class="project-sm-foot"><span class="chip">HTML</span><span class="chip">JavaScript</span><span class="chip">Open Source</span></div>
+    <a href="#" class="product-cta" data-r>Learn more <span class="arrow">→</span></a>
+    <div class="product-screenshot" data-r>
+      <div class="screenshot-glow"></div>
+      <div class="screenshot-wrap">
+        <img src="mockups/fluxo.png" alt="Fluxo Orçamentos" class="screenshot-img">
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- ═══ STACK ═══ -->
-<section id="stack">
-  <div class="wrap">
-    <div class="section-header" data-reveal>
-      <div class="section-tag">Tech Stack</div>
-      <h2 class="section-h">Tools of the trade.</h2>
-      <p class="section-p">Whatever solves the problem. From low-level engineering math to cloud AI orchestration.</p>
+<!-- ═══ AI AGENTS ═══ -->
+<section class="product-section ps-agents">
+  <div class="product-inner">
+    <div class="product-label" data-r>AI Agent Infrastructure</div>
+    <h2 class="product-title" data-r>Agents that run<br>while you sleep.</h2>
+    <p class="product-desc" data-r>Autonomous AI system running 24/7 on a VPS. Manages 4 YouTube channels, monitors email, tracks crypto, posts on social media, and auto-replies — zero human intervention.</p>
+    <div class="product-tags" data-r>
+      <span class="ptag">OpenClaw</span>
+      <span class="ptag">Claude</span>
+      <span class="ptag">Python</span>
+      <span class="ptag">Docker</span>
+      <span class="ptag">ElevenLabs</span>
+      <span class="ptag">Gemini</span>
     </div>
-    <div class="stack-flow" data-reveal>
-      <div class="stack-tag"><span class="stack-dot" style="background:#3572A5"></span>Python</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#f1e05a"></span>JavaScript</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#3178c6"></span>TypeScript</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#178600"></span>C#</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#61dafb"></span>React</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#fff"></span>Next.js</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#009688"></span>FastAPI</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#2496ed"></span>Docker</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:var(--accent)"></span>Claude AI</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:var(--violet)"></span>OpenClaw</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#FFA611"></span>Firebase</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:var(--blue)"></span>ElevenLabs</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#FFC131"></span>Tauri</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#4285f4"></span>Gemini</div>
-      <div class="stack-tag"><span class="stack-dot" style="background:#68217A"></span>.NET / WPF</div>
+    <a href="#" class="product-cta" data-r>Learn more <span class="arrow">→</span></a>
+    <div class="product-screenshot" data-r>
+      <div class="screenshot-glow"></div>
+      <div class="screenshot-wrap">
+        <div class="screenshot-placeholder" style="--ps-color1:#0a1628;--ps-color2:#060d18">Screenshot coming soon</div>
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- ═══ BIM ═══ -->
+<section class="product-section ps-bim">
+  <div class="product-inner">
+    <div class="product-label" data-r>CMXPro-BIM</div>
+    <h2 class="product-title" data-r>Revit, supercharged<br>for HVAC.</h2>
+    <p class="product-desc" data-r>Revit plugin for HVAC duct design. Specialized in octagonal MPU ducts — a technical niche no one else covers. 63K+ lines of C# powering real engineering workflows.</p>
+    <div class="product-tags" data-r>
+      <span class="ptag">C#</span>
+      <span class="ptag">.NET</span>
+      <span class="ptag">Revit API</span>
+      <span class="ptag">WPF</span>
+    </div>
+    <a href="#" class="product-cta" data-r>Learn more <span class="arrow">→</span></a>
+    <div class="product-screenshot" data-r>
+      <div class="screenshot-glow"></div>
+      <div class="screenshot-wrap">
+        <div class="screenshot-placeholder" style="--ps-color1:#120a20;--ps-color2:#0a0614">Screenshot coming soon</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MORE PRODUCTS ═══ -->
+<section class="more-section">
+  <div class="more-inner">
+    <div class="more-header" data-r>
+      <h2 class="more-h">And more.</h2>
+      <p class="more-p">Other projects in various stages of development.</p>
+    </div>
+    <div class="more-grid">
+      <div class="more-card" data-r style="--card-accent:rgba(139,92,246,.04)">
+        <span class="more-badge mb-poc">Proof of Concept</span>
+        <span class="more-icon">🏥</span>
+        <div class="more-name">SimPrótese</div>
+        <div class="more-desc">B2B platform for plastic surgeons. AI-powered surgical simulation and planning tools for pre-operative visualization.</div>
+      </div>
+      <div class="more-card" data-r="d1" style="--card-accent:rgba(59,130,246,.04)">
+        <span class="more-badge mb-online">Online</span>
+        <span class="more-icon">🌡️</span>
+        <div class="more-name">HVAC Tools</div>
+        <div class="more-desc">Open-source engineering calculators. Psychrometric charts, duct sizing, and thermal load calculations for professionals.</div>
+      </div>
+      <div class="more-card" data-r="d2" style="--card-accent:rgba(255,107,43,.04)">
+        <span class="more-badge mb-private">Private</span>
+        <span class="more-icon">💰</span>
+        <div class="more-name">Price Monitor</div>
+        <div class="more-desc">Automated price tracking and ICMS-ST tax simulation system for Brazilian market compliance.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NUMBERS ═══ -->
+<section class="numbers" id="numbers">
+  <div class="numbers-inner">
+    <div class="num" data-r><div class="num-val">250K+</div><div class="num-label">Lines of Code</div></div>
+    <div class="num" data-r="d1"><div class="num-val">8+</div><div class="num-label">Active Products</div></div>
+    <div class="num" data-r="d2"><div class="num-val">24/7</div><div class="num-label">Agent Uptime</div></div>
+    <div class="num" data-r="d3"><div class="num-val">4</div><div class="num-label">Autonomous Channels</div></div>
   </div>
 </section>
 
 <!-- ═══ CTA ═══ -->
-<section class="cta-section">
-  <div class="wrap" data-reveal>
-    <h2 class="cta-h">Let's build<br>something.</h2>
-    <p class="cta-p">Have a project in mind? Want to collaborate? I'm always open to interesting problems.</p>
-    <a href="mailto:nesken@fluxo.eng.br" class="btn btn-glow">nesken@fluxo.eng.br →</a>
-    <div class="cta-links">
-      <a href="https://x.com/0xnesken" target="_blank">𝕏 Twitter</a>
-      <a href="https://instagram.com/nesken.ai" target="_blank">Instagram</a>
-      <a href="https://github.com/neskenfrederico-gif" target="_blank">GitHub</a>
-    </div>
+<section class="cta">
+  <h2 class="cta-h" data-r>Let's build<br>something.</h2>
+  <p class="cta-p" data-r>Have a project? Need engineering software? Let's talk.</p>
+  <a href="mailto:nesken@fluxo.eng.br" class="btn btn-white" data-r>nesken@fluxo.eng.br</a>
+  <div class="cta-links" data-r>
+    <a href="https://x.com/0xnesken" target="_blank">𝕏 Twitter</a>
+    <a href="https://instagram.com/nesken.ai" target="_blank">Instagram</a>
+    <a href="https://github.com/neskenfrederico-gif" target="_blank">GitHub</a>
+    <a href="https://linkedin.com" target="_blank">LinkedIn</a>
   </div>
 </section>
 
 <footer>
-  <div class="wrap">
+  <div class="footer-inner">
     <span>© 2026 Nesken · Anápolis, Brazil</span>
-    <span style="font-size:11px;color:var(--t3)">Built with AI agents</span>
+    <span>Built with AI</span>
   </div>
 </footer>
 
 <script>
 // Nav scroll
-const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>50)});
+const n=document.getElementById('nav');
+window.addEventListener('scroll',()=>n.classList.toggle('scrolled',scrollY>80));
 
 // Scroll reveal
-const io=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.classList.add('shown');io.unobserve(el.target)}})},{threshold:.1,rootMargin:'0px 0px -60px 0px'});
-document.querySelectorAll('[data-reveal]').forEach(el=>io.observe(el));
-
-// Chart mockup
-const c=document.getElementById('chart1');
-if(c){const vals=[35,52,48,72,65,88,78,95,92,110,105,128];
-vals.forEach((v,i)=>{const b=document.createElement('div');b.className='chart-bar';
-b.style.cssText=`height:${v/130*100}%;background:${i>=9?'var(--accent)':i>=6?'var(--blue)':'rgba(255,255,255,.08)'};`;
-c.appendChild(b)})}
-
-// Parallax orbs on mouse
-document.addEventListener('mousemove',e=>{const x=(e.clientX/innerWidth-.5)*15;const y=(e.clientY/innerHeight-.5)*15;
-document.querySelectorAll('.orb').forEach((o,i)=>{const s=(i+1)*.4;o.style.transform=`translate(${x*s}px,${y*s}px)`})});
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');io.unobserve(e.target)}})
+},{threshold:.05,rootMargin:'0px 0px -80px 0px'});
+document.querySelectorAll('[data-r]').forEach(e=>io.observe(e));
 </script>
 </body>
 </html>
