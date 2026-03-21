@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1280px;height:800px;font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;overflow:hidden}
+.app{display:grid;grid-template-columns:240px 1fr;height:100%}
+
+/* Sidebar */
+.sidebar{background:#0d0d0d;border-right:1px solid rgba(255,255,255,.06);padding:20px 0;display:flex;flex-direction:column}
+.sidebar-logo{padding:0 20px;font-size:18px;font-weight:800;letter-spacing:-.5px;margin-bottom:28px;display:flex;align-items:center;gap:10px}
+.sidebar-logo .dot{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#ff6b2b,#ff8f5c);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.sidebar-section{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.25);padding:0 20px;margin:20px 0 8px}
+.sidebar-item{padding:9px 20px;font-size:13px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s}
+.sidebar-item.active{color:#fff;background:rgba(255,255,255,.05);border-right:2px solid #ff6b2b}
+.sidebar-item svg{width:16px;height:16px;opacity:.5}
+
+/* Main */
+.main{display:flex;flex-direction:column;overflow:hidden}
+.topbar{padding:16px 28px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.02)}
+.topbar h2{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.topbar-r{display:flex;gap:12px;align-items:center}
+.topbar-btn{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+.topbar-btn.primary{background:#ff6b2b;border:none;color:#fff}
+
+.content{padding:28px;flex:1;overflow:hidden}
+
+/* KPI Row */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.kpi{background:#111;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:20px}
+.kpi-label{font-size:11px;color:rgba(255,255,255,.35);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.kpi-val{font-size:28px;font-weight:800;letter-spacing:-1.5px}
+.kpi-change{font-size:11px;margin-top:4px;font-weight:600}
+.kpi-change.up{color:#10b981}
+.kpi-change.down{color:#ef4444}
+
+/* Charts area */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:24px}
+.chart-card{background:#111;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:20px}
+.chart-title{font-size:13px;font-weight:600;margin-bottom:16px;color:rgba(255,255,255,.7)}
+.chart-area{height:160px;display:flex;align-items:flex-end;gap:6px}
+.bar{flex:1;border-radius:4px 4px 0 0;transition:.3s}
+
+/* Table */
+.table-card{background:#111;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:20px}
+.table-card .chart-title{margin-bottom:12px}
+.table-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(255,255,255,.5)}
+.table-row:first-child{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.25);font-weight:700}
+.table-row .name{color:#fff;font-weight:600}
+.status{padding:3px 10px;border-radius:100px;font-size:10px;font-weight:600;width:fit-content}
+.status.active{background:rgba(16,185,129,.1);color:#10b981}
+.status.pending{background:rgba(255,107,43,.1);color:#ff6b2b}
+
+/* Donut */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
+.donut{width:140px;height:140px;border-radius:50%;background:conic-gradient(#ff6b2b 0% 38%,#3b82f6 38% 62%,#10b981 62% 85%,rgba(255,255,255,.08) 85% 100%);display:flex;align-items:center;justify-content:center;position:relative}
+.donut::after{content:'';width:90px;height:90px;border-radius:50%;background:#111;position:absolute}
+.donut-center{position:relative;z-index:1;text-align:center}
+.donut-val{font-size:24px;font-weight:800}
+.donut-label{font-size:10px;color:rgba(255,255,255,.4)}
+.donut-legend{display:flex;gap:16px;margin-top:16px;font-size:11px;color:rgba(255,255,255,.4)}
+.donut-legend span{display:flex;align-items:center;gap:5px}
+.donut-legend .d{width:8px;height:8px;border-radius:2px}
+</style></head><body>
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo"><div class="dot">C</div>CMXPro Suite</div>
+    <div class="sidebar-section">Main</div>
+    <div class="sidebar-item active">📊 Dashboard</div>
+    <div class="sidebar-item">📐 Duct Design</div>
+    <div class="sidebar-item">❄️ Thermal Load</div>
+    <div class="sidebar-item">🌡️ Psychrometric</div>
+    <div class="sidebar-item">📋 Projects</div>
+    <div class="sidebar-section">Management</div>
+    <div class="sidebar-item">👥 Clients</div>
+    <div class="sidebar-item">💰 Budgets</div>
+    <div class="sidebar-item">📄 Reports</div>
+    <div class="sidebar-section">Settings</div>
+    <div class="sidebar-item">⚙️ Preferences</div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <h2>Dashboard</h2>
+      <div class="topbar-r">
+        <div class="topbar-btn">Export PDF</div>
+        <div class="topbar-btn primary">+ New Project</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">Active Projects</div><div class="kpi-val">127</div><div class="kpi-change up">↑ 12% this month</div></div>
+        <div class="kpi"><div class="kpi-label">Total Revenue</div><div class="kpi-val" style="color:#10b981">R$ 2.4M</div><div class="kpi-change up">↑ 23% YoY</div></div>
+        <div class="kpi"><div class="kpi-label">Avg. Thermal Load</div><div class="kpi-val" style="color:#3b82f6">48.7 TR</div><div class="kpi-change">Per project avg</div></div>
+        <div class="kpi"><div class="kpi-label">Completion Rate</div><div class="kpi-val" style="color:#ff6b2b">94.2%</div><div class="kpi-change up">↑ 3.1% vs last Q</div></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">Monthly Revenue (R$ thousands)</div>
+          <div class="chart-area" id="chart"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Project Distribution</div>
+          <div class="donut-wrap">
+            <div class="donut"><div class="donut-center"><div class="donut-val">127</div><div class="donut-label">Total</div></div></div>
+            <div class="donut-legend">
+              <span><span class="d" style="background:#ff6b2b"></span>HVAC</span>
+              <span><span class="d" style="background:#3b82f6"></span>Clean Room</span>
+              <span><span class="d" style="background:#10b981"></span>Industrial</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-card">
+        <div class="chart-title">Recent Projects</div>
+        <div class="table-row"><span>Project</span><span>Type</span><span>Load (TR)</span><span>Status</span></div>
+        <div class="table-row"><span class="name">Achê Farmacêutica</span><span>Clean Room</span><span>156.3</span><span><div class="status active">Active</div></span></div>
+        <div class="table-row"><span class="name">Boticário CD Goiânia</span><span>Industrial</span><span>312.8</span><span><div class="status active">Active</div></span></div>
+        <div class="table-row"><span class="name">Hospital Santa Mônica</span><span>HVAC</span><span>89.4</span><span><div class="status pending">Pending</div></span></div>
+        <div class="table-row"><span class="name">Shopping Flamboyant</span><span>HVAC</span><span>245.1</span><span><div class="status active">Active</div></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const v=[120,185,165,240,210,295,270,320,305,380,350,420];
+const c=document.getElementById('chart');
+v.forEach((val,i)=>{const b=document.createElement('div');b.className='bar';
+b.style.cssText=`height:${val/440*100}%;background:${i>=10?'#ff6b2b':i>=7?'#3b82f6':'rgba(255,255,255,.08)'}`;c.appendChild(b)});
+</script>
+</body></html>

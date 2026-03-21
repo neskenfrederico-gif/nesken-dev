@@ -113,7 +113,9 @@ nav .wrap{display:flex;justify-content:space-between;align-items:center}
 .product-metric span{font-size:11px;color:var(--t3);margin-top:2px}
 
 /* Product visual */
-.product-visual{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.02),rgba(255,255,255,.01));display:flex;align-items:center;justify-content:center;min-height:360px;border-left:1px solid var(--border);overflow:hidden}
+.product-visual{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.02),rgba(255,255,255,.01));display:flex;align-items:center;justify-content:center;min-height:400px;border-left:1px solid var(--border);overflow:hidden;perspective:1200px}
+.mockup-img{width:110%;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);transform:rotateY(-8deg) rotateX(2deg) scale(.95);transition:transform .5s ease,box-shadow .5s ease}
+.product-card:hover .mockup-img{transform:rotateY(-3deg) rotateX(1deg) scale(.98);box-shadow:0 32px 100px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.1)}
 .mockup{width:85%;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.5);border:1px solid var(--border);background:var(--surface)}
 .mockup-bar{height:32px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:6px}
 .mockup-bar span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1)}
@@ -142,6 +144,8 @@ nav .wrap{display:flex;justify-content:space-between;align-items:center}
 .product-card.reverse{grid-template-columns:1fr 1fr;direction:rtl}
 .product-card.reverse>*{direction:ltr}
 .product-card.reverse .product-visual{border-left:none;border-right:1px solid var(--border)}
+.product-card.reverse .mockup-img{transform:rotateY(8deg) rotateX(2deg) scale(.95)}
+.product-card.reverse:hover .mockup-img{transform:rotateY(3deg) rotateX(1deg) scale(.98)}
 
 /* ═══ SMALLER PROJECTS ═══ */
 .projects-small{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
@@ -289,33 +293,7 @@ footer span{font-size:12px;color:var(--t3)}
           </div>
         </div>
         <div class="product-visual">
-          <div class="mockup">
-            <div class="mockup-bar"><span></span><span></span><span></span></div>
-            <div class="mockup-body">
-              <div class="dash-grid">
-                <div class="dash-card">
-                  <div class="dash-label">ACTIVE PROJECTS</div>
-                  <div class="dash-val accent">127</div>
-                  <div class="dash-bar"><div class="dash-bar-fill o"></div></div>
-                </div>
-                <div class="dash-card">
-                  <div class="dash-label">COMPLETION RATE</div>
-                  <div class="dash-val up">94.2%</div>
-                  <div class="dash-bar"><div class="dash-bar-fill g"></div></div>
-                </div>
-                <div class="dash-card">
-                  <div class="dash-label">THERMAL LOAD</div>
-                  <div class="dash-val blue">48.7 TR</div>
-                  <div class="dash-bar"><div class="dash-bar-fill b"></div></div>
-                </div>
-                <div class="dash-card">
-                  <div class="dash-label">DUCT PRESSURE</div>
-                  <div class="dash-val" style="color:var(--violet)">1.2 Pa/m</div>
-                  <div class="dash-bar"><div class="dash-bar-fill v"></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <img src="mockups/cmxpro.png" alt="CMXPro Suite Dashboard" class="mockup-img">
         </div>
       </div>
 
@@ -335,15 +313,7 @@ footer span{font-size:12px;color:var(--t3)}
           </div>
         </div>
         <div class="product-visual">
-          <div class="mockup">
-            <div class="mockup-bar"><span></span><span></span><span></span></div>
-            <div class="mockup-body">
-              <div class="chart-mock" id="chart1"></div>
-              <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:10px;color:var(--t3);font-family:'JetBrains Mono',monospace">
-                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-              </div>
-            </div>
-          </div>
+          <img src="mockups/fluxo.png" alt="Fluxo Orçamentos Dashboard" class="mockup-img">
         </div>
       </div>
 
