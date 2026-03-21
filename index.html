@@ -1,1033 +1,477 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nesken — HVAC Engineer. AI Builder. Software Developer.</title>
-    <meta name="description" content="Building things that run while I sleep. HVAC engineer, AI builder, and software developer from Anápolis, Brazil.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg: #0a0a0a;
-            --card: #111111;
-            --border: rgba(255,255,255,0.06);
-            --border-hover: rgba(255,255,255,0.12);
-            --accent: #ff7832;
-            --accent-glow: rgba(255,120,50,0.15);
-            --blue: #4f8fff;
-            --blue-glow: rgba(79,143,255,0.15);
-            --text: #ededed;
-            --text-secondary: #888888;
-            --text-tertiary: #555555;
-            --radius: 12px;
-            --radius-sm: 8px;
-            --radius-xs: 6px;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Noise texture overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            opacity: 0.03;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 256px 256px;
-        }
-
-        /* Gradient mesh backgrounds */
-        .gradient-mesh {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .gradient-mesh .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.07;
-        }
-
-        .gradient-mesh .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: var(--accent);
-            top: -200px;
-            right: -100px;
-            animation: float1 20s ease-in-out infinite;
-        }
-
-        .gradient-mesh .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: var(--blue);
-            bottom: 20%;
-            left: -150px;
-            animation: float2 25s ease-in-out infinite;
-        }
-
-        .gradient-mesh .orb-3 {
-            width: 400px;
-            height: 400px;
-            background: #a855f7;
-            top: 50%;
-            right: 20%;
-            animation: float3 22s ease-in-out infinite;
-        }
-
-        @keyframes float1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-50px, 80px) scale(1.1); }
-            66% { transform: translate(30px, -40px) scale(0.95); }
-        }
-
-        @keyframes float2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(60px, -50px) scale(1.05); }
-            66% { transform: translate(-30px, 60px) scale(0.9); }
-        }
-
-        @keyframes float3 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-40px, -60px) scale(1.1); }
-        }
-
-        /* Layout */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 24px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 16px 0;
-            transition: all 0.3s ease;
-        }
-
-        nav.scrolled {
-            background: rgba(10,10,10,0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-logo {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text);
-            text-decoration: none;
-            letter-spacing: -0.02em;
-        }
-
-        .nav-logo span {
-            color: var(--accent);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 400;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--text);
-        }
-
-        /* Fade-in animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 120px 0 80px;
-        }
-
-        .hero-content {
-            max-width: 720px;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            background: rgba(255,120,50,0.08);
-            border: 1px solid rgba(255,120,50,0.15);
-            border-radius: 100px;
-            font-size: 13px;
-            color: var(--accent);
-            font-weight: 500;
-            margin-bottom: 32px;
-        }
-
-        .hero-badge .dot {
-            width: 6px;
-            height: 6px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        .hero h1 {
-            font-size: clamp(56px, 10vw, 96px);
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 0.95;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, #ffffff 0%, #cccccc 50%, #999999 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-tagline {
-            font-size: clamp(16px, 2.5vw, 20px);
-            color: var(--text-secondary);
-            font-weight: 400;
-            letter-spacing: -0.01em;
-            margin-bottom: 8px;
-        }
-
-        .hero-tagline span {
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(14px, 2vw, 16px);
-            color: var(--text-tertiary);
-            font-weight: 400;
-            font-style: italic;
-            margin-bottom: 40px;
-        }
-
-        .hero-links {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .hero-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 400;
-            transition: all 0.25s ease;
-        }
-
-        .hero-link:hover {
-            border-color: var(--border-hover);
-            color: var(--text);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .hero-link svg {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-        }
-
-        .hero-location {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 24px;
-            font-size: 13px;
-            color: var(--text-tertiary);
-        }
-
-        /* Sections */
-        section {
-            padding: 100px 0;
-        }
-
-        .section-label {
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent);
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: clamp(28px, 4vw, 40px);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 16px;
-            color: var(--text);
-        }
-
-        .section-desc {
-            font-size: 16px;
-            color: var(--text-secondary);
-            max-width: 600px;
-            line-height: 1.7;
-            margin-bottom: 48px;
-        }
-
-        /* Divider */
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
-            margin: 0;
-        }
-
-        /* About */
-        .about-text {
-            font-size: 18px;
-            color: var(--text-secondary);
-            line-height: 1.8;
-            max-width: 640px;
-        }
-
-        .about-text strong {
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        /* Projects Grid */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .project-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 28px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,120,50,0.03) 0%, transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .project-card:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-        }
-
-        .project-card:hover::before {
-            opacity: 1;
-        }
-
-        .project-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-            position: relative;
-        }
-
-        .project-icon {
-            font-size: 28px;
-            line-height: 1;
-        }
-
-        .project-status {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 100px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .status-production {
-            background: rgba(34,197,94,0.1);
-            color: #22c55e;
-            border: 1px solid rgba(34,197,94,0.2);
-        }
-
-        .status-development {
-            background: rgba(255,120,50,0.1);
-            color: var(--accent);
-            border: 1px solid rgba(255,120,50,0.2);
-        }
-
-        .status-active {
-            background: rgba(79,143,255,0.1);
-            color: var(--blue);
-            border: 1px solid rgba(79,143,255,0.2);
-        }
-
-        .status-running {
-            background: rgba(168,85,247,0.1);
-            color: #a855f7;
-            border: 1px solid rgba(168,85,247,0.2);
-        }
-
-        .status-concept {
-            background: rgba(255,255,255,0.05);
-            color: var(--text-tertiary);
-            border: 1px solid var(--border);
-        }
-
-        .status-online {
-            background: rgba(34,197,94,0.1);
-            color: #22c55e;
-            border: 1px solid rgba(34,197,94,0.2);
-        }
-
-        .status-private {
-            background: rgba(255,255,255,0.05);
-            color: var(--text-tertiary);
-            border: 1px solid var(--border);
-        }
-
-        .project-name {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-            color: var(--text);
-            position: relative;
-        }
-
-        .project-desc {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 16px;
-            flex-grow: 1;
-            position: relative;
-        }
-
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            position: relative;
-        }
-
-        .project-tag {
-            font-size: 11px;
-            font-weight: 500;
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xs);
-            color: var(--text-tertiary);
-            transition: all 0.2s;
-        }
-
-        .project-card:hover .project-tag {
-            border-color: var(--border-hover);
-            color: var(--text-secondary);
-        }
-
-        .project-link-indicator {
-            position: absolute;
-            top: 28px;
-            right: 28px;
-            opacity: 0;
-            transform: translate(-4px, 4px);
-            transition: all 0.3s ease;
-            color: var(--text-tertiary);
-        }
-
-        .project-card:hover .project-link-indicator {
-            opacity: 1;
-            transform: translate(0, 0);
-        }
-
-        /* Tech Stack */
-        .tech-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .tech-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 20px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            transition: all 0.25s ease;
-        }
-
-        .tech-item:hover {
-            border-color: var(--border-hover);
-            color: var(--text);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        .tech-icon {
-            font-size: 20px;
-            width: 24px;
-            text-align: center;
-        }
-
-        /* Footer */
-        footer {
-            padding: 60px 0 40px;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-left h3 {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-        }
-
-        .footer-left p {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .footer-left a {
-            color: var(--accent);
-            text-decoration: none;
-            transition: opacity 0.2s;
-        }
-
-        .footer-left a:hover {
-            opacity: 0.8;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-links a {
-            color: var(--text-tertiary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--text);
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-copy {
-            font-size: 13px;
-            color: var(--text-tertiary);
-        }
-
-        .footer-built {
-            font-size: 12px;
-            color: var(--text-tertiary);
-            opacity: 0.6;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                padding: 100px 0 60px;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-links {
-                gap: 10px;
-            }
-
-            .hero-link {
-                padding: 8px 14px;
-                font-size: 13px;
-            }
-
-            section {
-                padding: 60px 0;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                gap: 24px;
-            }
-
-            .footer-links {
-                flex-wrap: wrap;
-                gap: 16px;
-            }
-
-            .project-card {
-                padding: 22px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 48px;
-            }
-
-            .tech-grid {
-                gap: 8px;
-            }
-
-            .tech-item {
-                padding: 10px 14px;
-                font-size: 13px;
-            }
-        }
-
-        /* Selection */
-        ::selection {
-            background: rgba(255,120,50,0.3);
-            color: #fff;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--text-tertiary);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-secondary);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nesken — Engineering the Future</title>
+<meta name="description" content="Software that thinks. Systems that never sleep.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050505;--surface:#0c0c0c;--card:#0f0f0f;
+  --border:rgba(255,255,255,.05);--border-h:rgba(255,255,255,.1);
+  --t1:#fafafa;--t2:rgba(255,255,255,.6);--t3:rgba(255,255,255,.3);
+  --accent:#ff6b2b;--accent2:#ff8f5c;--blue:#3b82f6;--violet:#8b5cf6;--emerald:#10b981;
+  --glow:rgba(255,107,43,.08);
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden;line-height:1.6}
+a{color:inherit;text-decoration:none}
+
+/* ═══ CANVAS / GRAIN ═══ */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E")}
+
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;will-change:transform}
+.orb-1{width:800px;height:800px;background:radial-gradient(circle,rgba(255,107,43,.06),transparent 70%);top:-300px;left:-200px;animation:float 20s ease-in-out infinite}
+.orb-2{width:600px;height:600px;background:radial-gradient(circle,rgba(59,130,246,.04),transparent 70%);bottom:-100px;right:-200px;animation:float 25s ease-in-out infinite reverse}
+.orb-3{width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,.03),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:float 30s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-40px)}50%{transform:translate(-20px,30px)}75%{transform:translate(40px,20px)}}
+
+/* ═══ LAYOUT ═══ */
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+section{padding:120px 0}
+
+/* ═══ NAV ═══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 0;transition:all .3s}
+nav.scrolled{background:rgba(5,5,5,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:14px 0}
+nav .wrap{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:17px;font-weight:700;letter-spacing:-.5px}
+.logo em{font-style:normal;color:var(--accent);font-weight:800}
+.nav-r{display:flex;align-items:center;gap:36px}
+.nav-r a{font-size:13px;color:var(--t3);font-weight:500;transition:color .2s;letter-spacing:.3px}
+.nav-r a:hover{color:var(--t1)}
+.nav-cta{background:var(--accent)!important;color:#fff!important;padding:8px 18px;border-radius:8px;font-weight:600!important;transition:all .2s!important}
+.nav-cta:hover{box-shadow:0 0 24px var(--glow);transform:translateY(-1px)}
+
+/* ═══ HERO ═══ */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:28px}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--accent)}
+.hero h1{font-size:clamp(40px,5.5vw,72px);font-weight:800;letter-spacing:-2.5px;line-height:1.05;margin-bottom:24px}
+.hero h1 span{display:block;background:linear-gradient(135deg,var(--t1) 0%,var(--t2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1 .glow-text{background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 40%,var(--blue) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{font-size:17px;color:var(--t2);line-height:1.8;max-width:480px;margin-bottom:40px}
+.hero-btns{display:flex;gap:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:12px;font-size:14px;font-weight:600;transition:all .25s;border:none;cursor:pointer}
+.btn-glow{background:linear-gradient(135deg,var(--accent),#e85d1a);color:#fff;box-shadow:0 4px 20px rgba(255,107,43,.2)}
+.btn-glow:hover{box-shadow:0 8px 40px rgba(255,107,43,.35);transform:translateY(-2px)}
+.btn-ghost{background:rgba(255,255,255,.04);color:var(--t2);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--border-h);color:var(--t1);background:rgba(255,255,255,.06)}
+
+/* Hero visual */
+.hero-visual{position:relative;height:480px}
+.terminal{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5);position:absolute;width:100%;height:100%}
+.terminal-bar{display:flex;gap:7px;padding:14px 18px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+.terminal-dot{width:11px;height:11px;border-radius:50%}
+.terminal-dot:nth-child(1){background:#ff5f57}
+.terminal-dot:nth-child(2){background:#febc2e}
+.terminal-dot:nth-child(3){background:#28c840}
+.terminal-title{margin-left:12px;font-size:12px;color:var(--t3);font-family:'JetBrains Mono',monospace}
+.terminal-body{padding:20px 22px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2;color:var(--t3)}
+.terminal-body .g{color:var(--emerald)}.terminal-body .o{color:var(--accent)}.terminal-body .b{color:var(--blue)}.terminal-body .v{color:var(--violet)}.terminal-body .w{color:var(--t1)}
+.cursor{display:inline-block;width:8px;height:16px;background:var(--accent);animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ═══ METRICS ═══ */
+.metrics{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 0}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.metric{text-align:center}
+.metric-val{font-size:48px;font-weight:800;letter-spacing:-3px;background:linear-gradient(180deg,var(--t1),var(--t3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.metric-label{font-size:13px;color:var(--t3);margin-top:4px;font-weight:500}
+
+/* ═══ PRODUCTS ═══ */
+.section-header{margin-bottom:64px}
+.section-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:14px}
+.section-h{font-size:clamp(32px,4vw,48px);font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:16px}
+.section-p{font-size:16px;color:var(--t2);max-width:500px;line-height:1.7}
+
+/* Product showcase */
+.product-showcase{display:flex;flex-direction:column;gap:24px}
+.product-card{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .4s;position:relative}
+.product-card:hover{border-color:var(--border-h);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.product-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,107,43,.2),transparent);opacity:0;transition:opacity .4s}
+.product-card:hover::after{opacity:1}
+.product-info{padding:48px;display:flex;flex-direction:column;justify-content:center}
+.product-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;width:fit-content;margin-bottom:20px}
+.badge-live{background:rgba(16,185,129,.1);color:var(--emerald)}
+.badge-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--emerald);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.badge-dev{background:rgba(59,130,246,.1);color:var(--blue)}
+.badge-poc{background:rgba(255,255,255,.04);color:var(--t3)}
+.badge-active{background:rgba(139,92,246,.1);color:var(--violet)}
+.product-name{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.product-desc{font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:24px}
+.product-stack{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px}
+.chip{font-size:11px;padding:5px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--t3);font-weight:500}
+.product-metrics{display:flex;gap:32px}
+.product-metric{display:flex;flex-direction:column}
+.product-metric strong{font-size:20px;font-weight:700;color:var(--t1)}
+.product-metric span{font-size:11px;color:var(--t3);margin-top:2px}
+
+/* Product visual */
+.product-visual{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.02),rgba(255,255,255,.01));display:flex;align-items:center;justify-content:center;min-height:360px;border-left:1px solid var(--border);overflow:hidden}
+.mockup{width:85%;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.5);border:1px solid var(--border);background:var(--surface)}
+.mockup-bar{height:32px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:6px}
+.mockup-bar span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1)}
+.mockup-body{padding:20px;min-height:200px}
+
+/* Dashboard mockup */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dash-card{background:rgba(255,255,255,.03);border-radius:8px;padding:14px;border:1px solid rgba(255,255,255,.04)}
+.dash-label{font-size:10px;color:var(--t3);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+.dash-val{font-size:22px;font-weight:700;letter-spacing:-1px}
+.dash-val.up{color:var(--emerald)}
+.dash-val.accent{color:var(--accent)}
+.dash-val.blue{color:var(--blue)}
+.dash-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.06);margin-top:8px;overflow:hidden}
+.dash-bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
+.dash-bar-fill.g{background:var(--emerald);width:78%}
+.dash-bar-fill.o{background:var(--accent);width:62%}
+.dash-bar-fill.b{background:var(--blue);width:91%}
+.dash-bar-fill.v{background:var(--violet);width:45%}
+
+/* Chart mockup */
+.chart-mock{display:flex;align-items:flex-end;gap:4px;height:120px;padding-top:10px}
+.chart-bar{flex:1;border-radius:3px 3px 0 0;transition:height .6s ease;min-width:8px}
+
+/* Reverse card */
+.product-card.reverse{grid-template-columns:1fr 1fr;direction:rtl}
+.product-card.reverse>*{direction:ltr}
+.product-card.reverse .product-visual{border-left:none;border-right:1px solid var(--border)}
+
+/* ═══ SMALLER PROJECTS ═══ */
+.projects-small{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.project-sm{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all .3s}
+.project-sm:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.project-sm-icon{font-size:24px;margin-bottom:14px;display:block}
+.project-sm-name{font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.3px}
+.project-sm-desc{font-size:13px;color:var(--t3);line-height:1.6}
+.project-sm-foot{display:flex;gap:6px;margin-top:16px}
+
+/* ═══ STACK ═══ */
+.stack-flow{display:flex;flex-wrap:wrap;gap:10px}
+.stack-tag{display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--card);border:1px solid var(--border);border-radius:12px;font-size:13px;font-weight:500;color:var(--t2);transition:all .2s}
+.stack-tag:hover{border-color:var(--border-h);color:var(--t1);transform:translateY(-1px)}
+.stack-dot{width:8px;height:8px;border-radius:50%}
+
+/* ═══ CTA ═══ */
+.cta-section{text-align:center;padding:140px 0}
+.cta-h{font-size:clamp(36px,5vw,56px);font-weight:800;letter-spacing:-2px;margin-bottom:16px;line-height:1.1}
+.cta-p{font-size:17px;color:var(--t2);margin-bottom:40px;max-width:440px;margin-left:auto;margin-right:auto}
+.cta-links{display:flex;justify-content:center;gap:32px;margin-top:48px}
+.cta-links a{font-size:13px;color:var(--t3);transition:color .2s;font-weight:500}
+.cta-links a:hover{color:var(--t1)}
+
+/* ═══ FOOTER ═══ */
+footer{border-top:1px solid var(--border);padding:32px 0}
+footer .wrap{display:flex;justify-content:space-between;align-items:center}
+footer span{font-size:12px;color:var(--t3)}
+
+/* ═══ SCROLL REVEAL ═══ */
+[data-reveal]{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+[data-reveal].shown{opacity:1;transform:none}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .hero-grid,.product-card,.product-card.reverse{grid-template-columns:1fr}
+  .hero-visual{height:320px;margin-top:40px}
+  .metrics-grid{grid-template-columns:repeat(2,1fr);gap:24px}
+  .projects-small{grid-template-columns:1fr}
+  .product-visual{min-height:240px;border-left:none!important;border-right:none!important;border-top:1px solid var(--border)}
+  .product-card.reverse{direction:ltr}
+  .nav-r a:not(.nav-cta){display:none}
+}
+</style>
 </head>
 <body>
 
-    <!-- Gradient Mesh Background -->
-    <div class="gradient-mesh">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+<div class="grain"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<nav id="nav">
+  <div class="wrap">
+    <a href="#" class="logo">nesken<em>.dev</em></a>
+    <div class="nav-r">
+      <a href="#products">Products</a>
+      <a href="#stack">Stack</a>
+      <a href="mailto:nesken@fluxo.eng.br" class="nav-cta">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div data-reveal>
+        <div class="hero-eyebrow">Software & AI Engineering</div>
+        <h1>
+          <span>Software that</span>
+          <span class="glow-text">thinks.</span>
+          <span>Systems that</span>
+          <span class="glow-text">never sleep.</span>
+        </h1>
+        <p class="hero-desc">I build commercial software, AI agent infrastructure, and engineering tools. From HVAC calculations to autonomous content pipelines — if it can be automated, it will be.</p>
+        <div class="hero-btns">
+          <a href="#products" class="btn btn-glow">Explore Products ↓</a>
+          <a href="https://github.com/neskenfrederico-gif" class="btn btn-ghost" target="_blank">GitHub →</a>
+        </div>
+      </div>
+      <div class="hero-visual" data-reveal>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div>
+            <span class="terminal-title">~/nesken/agents</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="g">→</span> <span class="w">17 cron jobs</span> active</div>
+            <div><span class="g">→</span> <span class="w">4 AI agents</span> online</div>
+            <div><span class="g">→</span> <span class="w">uptime:</span> <span class="o">52 days</span></div>
+            <div>&nbsp;</div>
+            <div><span class="b">$</span> openclaw status</div>
+            <div>&nbsp;&nbsp;<span class="g">✓</span> trend-researcher &nbsp;<span class="v">07:00</span></div>
+            <div>&nbsp;&nbsp;<span class="g">✓</span> crypto-brief &nbsp;&nbsp;&nbsp;&nbsp;<span class="v">09:00</span></div>
+            <div>&nbsp;&nbsp;<span class="g">✓</span> builder-story &nbsp;&nbsp;&nbsp;<span class="v">11:00</span></div>
+            <div>&nbsp;&nbsp;<span class="g">✓</span> x-auto-reply &nbsp;&nbsp;&nbsp;&nbsp;<span class="v">*/30m</span></div>
+            <div>&nbsp;&nbsp;<span class="g">✓</span> ig-daily-quote &nbsp;&nbsp;<span class="v">12:00</span></div>
+            <div>&nbsp;&nbsp;<span class="g">✓</span> email-monitor &nbsp;&nbsp;&nbsp;<span class="v">*/3h</span></div>
+            <div>&nbsp;</div>
+            <div><span class="b">$</span> <span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ METRICS ═══ -->
+<div class="metrics">
+  <div class="wrap">
+    <div class="metrics-grid">
+      <div class="metric" data-reveal><div class="metric-val">8+</div><div class="metric-label">Active Products</div></div>
+      <div class="metric" data-reveal><div class="metric-val">250K</div><div class="metric-label">Lines of Code</div></div>
+      <div class="metric" data-reveal><div class="metric-val">24/7</div><div class="metric-label">Agent Uptime</div></div>
+      <div class="metric" data-reveal><div class="metric-val">4</div><div class="metric-label">Autonomous Channels</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRODUCTS ═══ -->
+<section id="products">
+  <div class="wrap">
+    <div class="section-header" data-reveal>
+      <div class="section-tag">Products</div>
+      <h2 class="section-h">Built to solve<br>real problems.</h2>
+      <p class="section-p">Every product started as a personal need. From managing HVAC budgets to automating entire content workflows.</p>
     </div>
 
-    <!-- Navigation -->
-    <nav id="navbar">
-        <div class="container">
-            <a href="#" class="nav-logo">nesken<span>.</span>dev</a>
-            <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#stack">Stack</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+    <div class="product-showcase">
+
+      <!-- CMXPro Suite -->
+      <div class="product-card" data-reveal>
+        <div class="product-info">
+          <div class="product-badge badge-dev">In Development</div>
+          <div class="product-name">CMXPro Suite</div>
+          <p class="product-desc">Enterprise HVAC engineering software. Multi-platform: mobile for field work, web for management, desktop for heavy calculations. Migrating 250K lines of legacy Python into a modern stack.</p>
+          <div class="product-stack">
+            <span class="chip">React Native</span><span class="chip">Next.js</span><span class="chip">FastAPI</span><span class="chip">Tauri</span><span class="chip">Python</span>
+          </div>
+          <div class="product-metrics">
+            <div class="product-metric"><strong>24</strong><span>Mobile Screens</span></div>
+            <div class="product-metric"><strong>15+</strong><span>Web Pages</span></div>
+            <div class="product-metric"><strong>40</strong><span>API Endpoints</span></div>
+          </div>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="container">
-            <div class="hero-content fade-in">
-                <div class="hero-badge">
-                    <span class="dot"></span>
-                    Available for projects
+        <div class="product-visual">
+          <div class="mockup">
+            <div class="mockup-bar"><span></span><span></span><span></span></div>
+            <div class="mockup-body">
+              <div class="dash-grid">
+                <div class="dash-card">
+                  <div class="dash-label">ACTIVE PROJECTS</div>
+                  <div class="dash-val accent">127</div>
+                  <div class="dash-bar"><div class="dash-bar-fill o"></div></div>
                 </div>
-                <h1>Nesken</h1>
-                <p class="hero-tagline">
-                    <span>HVAC Engineer</span>. AI Builder. Software Developer.
-                </p>
-                <p class="hero-subtitle">Building things that run while I sleep.</p>
-                <div class="hero-links">
-                    <a href="https://x.com/0xnesken" target="_blank" rel="noopener" class="hero-link">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                        @0xnesken
-                    </a>
-                    <a href="https://instagram.com/nesken.ai" target="_blank" rel="noopener" class="hero-link">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                        @nesken.ai
-                    </a>
-                    <a href="https://github.com/neskenfrederico-gif" target="_blank" rel="noopener" class="hero-link">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                        GitHub
-                    </a>
-                    <a href="https://linkedin.com/in/nesken" target="_blank" rel="noopener" class="hero-link">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                        LinkedIn
-                    </a>
+                <div class="dash-card">
+                  <div class="dash-label">COMPLETION RATE</div>
+                  <div class="dash-val up">94.2%</div>
+                  <div class="dash-bar"><div class="dash-bar-fill g"></div></div>
                 </div>
-                <div class="hero-location">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    Anápolis, Brazil
+                <div class="dash-card">
+                  <div class="dash-label">THERMAL LOAD</div>
+                  <div class="dash-val blue">48.7 TR</div>
+                  <div class="dash-bar"><div class="dash-bar-fill b"></div></div>
                 </div>
+                <div class="dash-card">
+                  <div class="dash-label">DUCT PRESSURE</div>
+                  <div class="dash-val" style="color:var(--violet)">1.2 Pa/m</div>
+                  <div class="dash-bar"><div class="dash-bar-fill v"></div></div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <div class="container"><div class="divider"></div></div>
-
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <div class="fade-in">
-                <p class="section-label">About</p>
-                <h2 class="section-title">Engineer by trade,<br>builder by nature.</h2>
-                <p class="about-text">
-                    <strong>HVAC engineer by day</strong>, software developer and AI builder by night. 
-                    Building autonomous systems, commercial software, and open-source tools. 
-                    From designing ductwork in Revit to deploying AI agents that manage YouTube channels — 
-                    the common thread is <strong>systems that work</strong>.
-                </p>
-            </div>
+      <!-- Fluxo Orçamentos -->
+      <div class="product-card reverse" data-reveal>
+        <div class="product-info">
+          <div class="product-badge badge-live"><span></span>Production</div>
+          <div class="product-name">Fluxo Orçamentos</div>
+          <p class="product-desc">AI-powered budget management. Used daily at Siqueira & Blanco engineering. Automates proposal generation, cost analysis, and client tracking with Anthropic AI integration.</p>
+          <div class="product-stack">
+            <span class="chip">Next.js</span><span class="chip">React</span><span class="chip">Firebase</span><span class="chip">Claude AI</span>
+          </div>
+          <div class="product-metrics">
+            <div class="product-metric"><strong>627</strong><span>Files</span></div>
+            <div class="product-metric"><strong>R$2.4M</strong><span>Managed</span></div>
+            <div class="product-metric"><strong>3x</strong><span>Faster Proposals</span></div>
+          </div>
         </div>
-    </section>
-
-    <div class="container"><div class="divider"></div></div>
-
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="container">
-            <div class="fade-in">
-                <p class="section-label">Projects</p>
-                <h2 class="section-title">What I'm building.</h2>
-                <p class="section-desc">A mix of commercial products, open-source tools, and autonomous systems.</p>
+        <div class="product-visual">
+          <div class="mockup">
+            <div class="mockup-bar"><span></span><span></span><span></span></div>
+            <div class="mockup-body">
+              <div class="chart-mock" id="chart1"></div>
+              <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:10px;color:var(--t3);font-family:'JetBrains Mono',monospace">
+                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+              </div>
             </div>
-            <div class="projects-grid">
-
-                <!-- CMXPro Suite -->
-                <div class="project-card fade-in">
-                    <div class="project-header">
-                        <span class="project-icon">🔧</span>
-                        <span class="project-status status-development">In Development</span>
-                    </div>
-                    <h3 class="project-name">CMXPro Suite</h3>
-                    <p class="project-desc">Commercial HVAC software. Multi-platform: mobile (React Native), web (Next.js), desktop (Tauri), API (FastAPI).</p>
-                    <div class="project-tags">
-                        <span class="project-tag">React Native</span>
-                        <span class="project-tag">Next.js</span>
-                        <span class="project-tag">FastAPI</span>
-                        <span class="project-tag">Tauri</span>
-                        <span class="project-tag">Python</span>
-                    </div>
-                </div>
-
-                <!-- Fluxo Orçamentos -->
-                <div class="project-card fade-in">
-                    <div class="project-header">
-                        <span class="project-icon">📊</span>
-                        <span class="project-status status-production">Production</span>
-                    </div>
-                    <h3 class="project-name">Fluxo Orçamentos</h3>
-                    <p class="project-desc">Budget management system with AI-powered analysis. Used daily in production at Siqueira &amp; Blanco.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">Next.js</span>
-                        <span class="project-tag">React</span>
-                        <span class="project-tag">Firebase</span>
-                        <span class="project-tag">Anthropic AI</span>
-                    </div>
-                </div>
-
-                <!-- AI Agent Infrastructure -->
-                <div class="project-card fade-in">
-                    <div class="project-header">
-                        <span class="project-icon">🤖</span>
-                        <span class="project-status status-running">Running 24/7</span>
-                    </div>
-                    <h3 class="project-name">AI Agent Infrastructure</h3>
-                    <p class="project-desc">Autonomous AI system running 24/7 on a VPS. Manages 4 YouTube channels, email monitoring, crypto tracking, and social media — all automated.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">OpenClaw</span>
-                        <span class="project-tag">Claude</span>
-                        <span class="project-tag">Python</span>
-                        <span class="project-tag">Docker</span>
-                        <span class="project-tag">ElevenLabs</span>
-                    </div>
-                </div>
-
-                <!-- CMXPro-BIM -->
-                <div class="project-card fade-in">
-                    <div class="project-header">
-                        <span class="project-icon">🏗️</span>
-                        <span class="project-status status-active">Active</span>
-                    </div>
-                    <h3 class="project-name">CMXPro-BIM</h3>
-                    <p class="project-desc">Revit plugin for HVAC duct design. Specialized in octagonal MPU ducts — a niche no one else covers.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">C#</span>
-                        <span class="project-tag">.NET</span>
-                        <span class="project-tag">Revit API</span>
-                        <span class="project-tag">WPF</span>
-                    </div>
-                </div>
-
-                <!-- SimPrótese -->
-                <div class="project-card fade-in">
-                    <div class="project-header">
-                        <span class="project-icon">🏥</span>
-                        <span class="project-status status-concept">Proof of Concept</span>
-                    </div>
-                    <h3 class="project-name">SimPrótese</h3>
-                    <p class="project-desc">B2B platform for plastic surgeons. AI-powered surgical simulation and planning.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">TBD</span>
-                    </div>
-                </div>
-
-                <!-- HVAC Tools -->
-                <a href="https://neskenfrederico-gif.github.io/hvac-tools/" target="_blank" rel="noopener" class="project-card fade-in">
-                    <div class="project-header">
-                        <span class="project-icon">🌡️</span>
-                        <span class="project-status status-online">Online</span>
-                    </div>
-                    <h3 class="project-name">HVAC Tools</h3>
-                    <p class="project-desc">Open-source engineering calculators for HVAC professionals. Psychrometric charts, duct sizing, load calculations.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">HTML</span>
-                        <span class="project-tag">JavaScript</span>
-                        <span class="project-tag">CSS</span>
-                    </div>
-                    <div class="project-link-indicator">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-                    </div>
-                </a>
-
-                <!-- Price Monitor -->
-                <div class="project-card fade-in">
-                    <div class="project-header">
-                        <span class="project-icon">💰</span>
-                        <span class="project-status status-private">Private</span>
-                    </div>
-                    <h3 class="project-name">Price Monitor</h3>
-                    <p class="project-desc">Automated price tracking and ICMS-ST tax simulation system.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">Python</span>
-                    </div>
-                </div>
-
-                <!-- Website Siqueira & Blanco -->
-                <div class="project-card fade-in">
-                    <div class="project-header">
-                        <span class="project-icon">🏢</span>
-                        <span class="project-status status-production">Production</span>
-                    </div>
-                    <h3 class="project-name">Website Siqueira &amp; Blanco</h3>
-                    <p class="project-desc">Corporate website for HVAC engineering firm.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">PHP</span>
-                        <span class="project-tag">HTML</span>
-                        <span class="project-tag">CSS</span>
-                    </div>
-                </div>
-
-            </div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <div class="container"><div class="divider"></div></div>
-
-    <!-- Tech Stack Section -->
-    <section id="stack">
-        <div class="container">
-            <div class="fade-in">
-                <p class="section-label">Tech Stack</p>
-                <h2 class="section-title">Tools of the trade.</h2>
-                <p class="section-desc">The technologies I use daily to build, ship, and automate.</p>
-            </div>
-            <div class="tech-grid fade-in">
-                <div class="tech-item"><span class="tech-icon">🐍</span> Python</div>
-                <div class="tech-item"><span class="tech-icon">⚡</span> JavaScript / TypeScript</div>
-                <div class="tech-item"><span class="tech-icon">🔷</span> C#</div>
-                <div class="tech-item"><span class="tech-icon">⚛️</span> React</div>
-                <div class="tech-item"><span class="tech-icon">▲</span> Next.js</div>
-                <div class="tech-item"><span class="tech-icon">🚀</span> FastAPI</div>
-                <div class="tech-item"><span class="tech-icon">🐳</span> Docker</div>
-                <div class="tech-item"><span class="tech-icon">🧠</span> Claude AI</div>
-                <div class="tech-item"><span class="tech-icon">🦀</span> OpenClaw</div>
-            </div>
+      <!-- AI Agent Infra -->
+      <div class="product-card" data-reveal>
+        <div class="product-info">
+          <div class="product-badge badge-live"><span></span>Running 24/7</div>
+          <div class="product-name">AI Agent Infrastructure</div>
+          <p class="product-desc">Autonomous system on a VPS. Manages 4 YouTube channels, monitors email, tracks crypto, posts on social media, auto-replies to X mentions — zero human intervention.</p>
+          <div class="product-stack">
+            <span class="chip">OpenClaw</span><span class="chip">Claude</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">ElevenLabs</span><span class="chip">Gemini</span>
+          </div>
+          <div class="product-metrics">
+            <div class="product-metric"><strong>17</strong><span>Cron Jobs</span></div>
+            <div class="product-metric"><strong>52d</strong><span>Uptime</span></div>
+            <div class="product-metric"><strong>$40</strong><span>Monthly Infra</span></div>
+          </div>
         </div>
-    </section>
-
-    <div class="container"><div class="divider"></div></div>
-
-    <!-- Footer / Contact -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content fade-in">
-                <div class="footer-left">
-                    <h3>Let's connect.</h3>
-                    <p><a href="mailto:nesken@fluxo.eng.br">nesken@fluxo.eng.br</a></p>
-                </div>
-                <div class="footer-links">
-                    <a href="https://x.com/0xnesken" target="_blank" rel="noopener">X / Twitter</a>
-                    <a href="https://instagram.com/nesken.ai" target="_blank" rel="noopener">Instagram</a>
-                    <a href="https://github.com/neskenfrederico-gif" target="_blank" rel="noopener">GitHub</a>
-                    <a href="https://linkedin.com/in/nesken" target="_blank" rel="noopener">LinkedIn</a>
-                </div>
+        <div class="product-visual">
+          <div class="mockup">
+            <div class="mockup-bar"><span></span><span></span><span></span></div>
+            <div class="mockup-body" style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;color:var(--t3)">
+              <div><span style="color:var(--emerald)">●</span> briefing-matinal <span style="float:right;color:var(--emerald)">OK 2m ago</span></div>
+              <div><span style="color:var(--emerald)">●</span> crypto-brief <span style="float:right;color:var(--emerald)">OK 14m ago</span></div>
+              <div><span style="color:var(--emerald)">●</span> x-mentions-check <span style="float:right;color:var(--emerald)">OK 3m ago</span></div>
+              <div><span style="color:var(--emerald)">●</span> ig-daily-quote <span style="float:right;color:var(--accent)">next 2h</span></div>
+              <div><span style="color:var(--emerald)">●</span> email-fluxo-check <span style="float:right;color:var(--emerald)">OK 47m ago</span></div>
+              <div><span style="color:var(--emerald)">●</span> backup-gdrive <span style="float:right;color:var(--emerald)">OK 8h ago</span></div>
             </div>
-            <div class="footer-bottom">
-                <span class="footer-copy">© 2026 Nesken. All rights reserved.</span>
-                <span class="footer-built">Built with AI agents ✦</span>
-            </div>
+          </div>
         </div>
-    </footer>
+      </div>
 
-    <script>
-        // Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        let lastScroll = 0;
+    </div>
 
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            if (currentScroll > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-            lastScroll = currentScroll;
-        }, { passive: true });
+    <!-- Smaller projects -->
+    <div class="projects-small">
+      <div class="project-sm" data-reveal>
+        <span class="project-sm-icon">🏗️</span>
+        <div class="project-sm-name">CMXPro-BIM</div>
+        <p class="project-sm-desc">Revit plugin for HVAC duct design. Specialized in octagonal MPU ducts — a niche no one else covers.</p>
+        <div class="project-sm-foot"><span class="chip">C#</span><span class="chip">.NET</span><span class="chip">Revit API</span></div>
+      </div>
+      <div class="project-sm" data-reveal>
+        <span class="project-sm-icon">🏥</span>
+        <div class="project-sm-name">SimPrótese</div>
+        <p class="project-sm-desc">B2B platform for plastic surgeons. AI-powered surgical simulation and planning tools.</p>
+        <div class="project-sm-foot"><span class="chip">AI</span><span class="chip">Computer Vision</span></div>
+      </div>
+      <div class="project-sm" data-reveal>
+        <span class="project-sm-icon">🌡️</span>
+        <div class="project-sm-name">HVAC Tools</div>
+        <p class="project-sm-desc">Open-source engineering calculators. Psychrometric charts, duct sizing, load calculations.</p>
+        <div class="project-sm-foot"><span class="chip">HTML</span><span class="chip">JavaScript</span><span class="chip">Open Source</span></div>
+      </div>
+    </div>
 
-        // Intersection Observer for fade-in animations
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px -60px 0px',
-            threshold: 0.1
-        };
+  </div>
+</section>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    // Stagger animation for grid items
-                    const parent = entry.target.parentElement;
-                    if (parent && parent.classList.contains('projects-grid')) {
-                        const siblings = Array.from(parent.querySelectorAll('.fade-in'));
-                        const i = siblings.indexOf(entry.target);
-                        entry.target.style.transitionDelay = `${i * 80}ms`;
-                    }
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
+<!-- ═══ STACK ═══ -->
+<section id="stack">
+  <div class="wrap">
+    <div class="section-header" data-reveal>
+      <div class="section-tag">Tech Stack</div>
+      <h2 class="section-h">Tools of the trade.</h2>
+      <p class="section-p">Whatever solves the problem. From low-level engineering math to cloud AI orchestration.</p>
+    </div>
+    <div class="stack-flow" data-reveal>
+      <div class="stack-tag"><span class="stack-dot" style="background:#3572A5"></span>Python</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#f1e05a"></span>JavaScript</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#3178c6"></span>TypeScript</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#178600"></span>C#</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#61dafb"></span>React</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#fff"></span>Next.js</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#009688"></span>FastAPI</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#2496ed"></span>Docker</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:var(--accent)"></span>Claude AI</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:var(--violet)"></span>OpenClaw</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#FFA611"></span>Firebase</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:var(--blue)"></span>ElevenLabs</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#FFC131"></span>Tauri</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#4285f4"></span>Gemini</div>
+      <div class="stack-tag"><span class="stack-dot" style="background:#68217A"></span>.NET / WPF</div>
+    </div>
+  </div>
+</section>
 
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+<!-- ═══ CTA ═══ -->
+<section class="cta-section">
+  <div class="wrap" data-reveal>
+    <h2 class="cta-h">Let's build<br>something.</h2>
+    <p class="cta-p">Have a project in mind? Want to collaborate? I'm always open to interesting problems.</p>
+    <a href="mailto:nesken@fluxo.eng.br" class="btn btn-glow">nesken@fluxo.eng.br →</a>
+    <div class="cta-links">
+      <a href="https://x.com/0xnesken" target="_blank">𝕏 Twitter</a>
+      <a href="https://instagram.com/nesken.ai" target="_blank">Instagram</a>
+      <a href="https://github.com/neskenfrederico-gif" target="_blank">GitHub</a>
+    </div>
+  </div>
+</section>
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    </script>
+<footer>
+  <div class="wrap">
+    <span>© 2026 Nesken · Anápolis, Brazil</span>
+    <span style="font-size:11px;color:var(--t3)">Built with AI agents</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>50)});
+
+// Scroll reveal
+const io=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.classList.add('shown');io.unobserve(el.target)}})},{threshold:.1,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('[data-reveal]').forEach(el=>io.observe(el));
+
+// Chart mockup
+const c=document.getElementById('chart1');
+if(c){const vals=[35,52,48,72,65,88,78,95,92,110,105,128];
+vals.forEach((v,i)=>{const b=document.createElement('div');b.className='chart-bar';
+b.style.cssText=`height:${v/130*100}%;background:${i>=9?'var(--accent)':i>=6?'var(--blue)':'rgba(255,255,255,.08)'};`;
+c.appendChild(b)})}
+
+// Parallax orbs on mouse
+document.addEventListener('mousemove',e=>{const x=(e.clientX/innerWidth-.5)*15;const y=(e.clientY/innerHeight-.5)*15;
+document.querySelectorAll('.orb').forEach((o,i)=>{const s=(i+1)*.4;o.style.transform=`translate(${x*s}px,${y*s}px)`})});
+</script>
 </body>
 </html>
