@@ -227,7 +227,10 @@ footer{border-top:1px solid var(--border);padding:64px 0 32px}
 @media(max-width:900px){
   .nav-links a:not(.btn){display:none}
   .product-row,.product-row.reverse{grid-template-columns:1fr;direction:ltr}
-  .product-visual{min-height:240px;border-left:none!important;border-right:none!important;border-top:1px solid var(--border)}
+  .product-visual{min-height:240px;border-left:none!important;border-right:none!important;border-top:none;margin-top:-20px;padding-top:0}
+  .product-visual img{border-radius:12px;margin:0 16px;width:calc(100% - 32px)!important}
+  .product-visual .glow{display:none}
+  .product-text{padding:32px 28px 20px}
   .steps-grid,.features-grid,.testimonials-grid,.pricing-grid{grid-template-columns:1fr}
   .numbers-grid{grid-template-columns:repeat(2,1fr)}
   .hero-screens{height:280px}
