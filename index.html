@@ -92,14 +92,15 @@ section{padding:120px 0}
 
 /* ═══ PRODUCTS ═══ */
 .products-grid{display:flex;flex-direction:column;gap:24px;margin-top:56px}
-.product-row{padding:100px 0;border-bottom:1px solid var(--border)}
-.product-row:last-child{border-bottom:none}
+.product-row{padding:120px 0}
 .product-row.reverse{direction:ltr}
 .product-row.reverse>*{direction:ltr}
-.product-text{display:flex;flex-direction:column;max-width:600px;margin-bottom:56px}
+.product-header{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;margin-bottom:24px}
+.product-text{display:flex;flex-direction:column}
 .product-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px}
-.product-name{font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:10px}
-.product-desc{font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:24px}
+.product-name{font-size:clamp(32px,4vw,48px);font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:0}
+.product-right{display:flex;flex-direction:column;justify-content:flex-start;padding-top:8px}
+.product-desc{font-size:16px;color:var(--t2);line-height:1.8;margin-bottom:20px}
 .product-features{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
 .pf{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--t2)}
 .pf-check{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
@@ -107,10 +108,12 @@ section{padding:120px 0}
 .ptag{font-size:11px;font-weight:500;padding:4px 12px;border-radius:100px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--t3)}
 .product-cta{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;transition:gap .2s}
 .product-cta:hover{gap:14px}
-.product-visual{position:relative;display:flex;align-items:center;justify-content:center;perspective:1500px}
-.product-visual img{width:100%;border-radius:16px;box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);transition:transform .6s ease,box-shadow .6s ease}
-.product-row:hover .product-visual img{transform:translateY(-6px);box-shadow:0 50px 140px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.1)}
-.product-visual .glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70%;height:70%;border-radius:50%;filter:blur(120px);pointer-events:none;opacity:.2;z-index:-1}
+.product-link{font-size:14px;color:var(--t2);margin-top:16px;display:inline-flex;align-items:center;gap:6px;transition:color .2s}
+.product-link:hover{color:var(--t1)}
+.product-visual{position:relative;margin-top:64px}
+.product-visual img{width:100%;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);transition:transform .6s ease,box-shadow .6s ease}
+.product-row:hover .product-visual img{transform:translateY(-4px);box-shadow:0 48px 140px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.1)}
+.product-visual .glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70%;height:70%;border-radius:50%;filter:blur(120px);pointer-events:none;opacity:.15;z-index:-1}
 
 /* Color themes */
 .pc-orange .product-icon{background:rgba(255,107,43,.1);color:var(--accent)}
@@ -226,7 +229,9 @@ footer{border-top:1px solid var(--border);padding:64px 0 32px}
 @media(max-width:900px){
   .nav-links a:not(.btn){display:none}
   .product-row,.product-row.reverse{padding:60px 0}
-  .product-visual img{width:100%;border-radius:12px}
+  .product-header{grid-template-columns:1fr;gap:16px}
+  .product-visual{margin-top:40px}
+  .product-visual img{width:100%;border-radius:10px}
   .steps-grid,.features-grid,.testimonials-grid,.pricing-grid{grid-template-columns:1fr}
   .numbers-grid{grid-template-columns:repeat(2,1fr)}
   .hero-screens{height:280px}
@@ -300,20 +305,14 @@ footer{border-top:1px solid var(--border);padding:64px 0 32px}
     <div class="products-grid">
       <!-- CMXPro -->
       <div class="product-row pc-orange" data-r>
-        <div class="product-text">
-          <div class="product-icon">🔧</div>
-          <div class="product-name">CMXPro Suite</div>
-          <p class="product-desc">Enterprise HVAC engineering software. Design ducts, calculate thermal loads, manage projects — all in one multi-platform application.</p>
-          <div class="product-features">
-            <div class="pf"><span class="pf-check">✓</span>ASHRAE RTS thermal load calculation</div>
-            <div class="pf"><span class="pf-check">✓</span>Duct sizing & pressure drop analysis</div>
-            <div class="pf"><span class="pf-check">✓</span>Psychrometric chart & processes</div>
-            <div class="pf"><span class="pf-check">✓</span>Multi-platform: mobile, web & desktop</div>
+        <div class="product-header">
+          <div class="product-text">
+            <div class="product-name">HVAC engineering,<br>reimagined.</div>
           </div>
-          <div class="product-tags">
-            <span class="ptag">React Native</span><span class="ptag">Next.js</span><span class="ptag">FastAPI</span><span class="ptag">Python</span>
+          <div class="product-right">
+            <p class="product-desc">Enterprise-grade software for thermal load calculations, duct design, and project management. Multi-platform: mobile, web, and desktop.</p>
+            <a href="#pricing" class="product-link">1.0 CMXPro Suite →</a>
           </div>
-          <a href="#pricing" class="product-cta">View pricing <span>→</span></a>
         </div>
         <div class="product-visual">
           <div class="glow"></div>
@@ -321,22 +320,16 @@ footer{border-top:1px solid var(--border);padding:64px 0 32px}
         </div>
       </div>
 
-      <!-- Fluxo -->
-      <div class="product-row reverse pc-green" data-r>
-        <div class="product-text">
-          <div class="product-icon">📊</div>
-          <div class="product-name">Qotr</div>
-          <p class="product-desc">AI-powered budget management. Generate proposals 3x faster with Claude AI analysis, cost optimization, and automated client tracking.</p>
-          <div class="product-features">
-            <div class="pf"><span class="pf-check">✓</span>AI budget analysis with Claude</div>
-            <div class="pf"><span class="pf-check">✓</span>Automated proposal generation</div>
-            <div class="pf"><span class="pf-check">✓</span>Cost optimization suggestions</div>
-            <div class="pf"><span class="pf-check">✓</span>Client & project tracking</div>
+      <!-- Qotr -->
+      <div class="product-row pc-green" data-r>
+        <div class="product-header">
+          <div class="product-text">
+            <div class="product-name">Budgets, powered<br>by intelligence.</div>
           </div>
-          <div class="product-tags">
-            <span class="ptag">Next.js</span><span class="ptag">Firebase</span><span class="ptag">Claude AI</span>
+          <div class="product-right">
+            <p class="product-desc">AI-powered budget management. Generate proposals 3x faster with Claude AI analysis, cost optimization, and automated client tracking.</p>
+            <a href="#pricing" class="product-link">2.0 Qotr →</a>
           </div>
-          <a href="#pricing" class="product-cta">View pricing <span>→</span></a>
         </div>
         <div class="product-visual">
           <div class="glow"></div>
@@ -346,47 +339,35 @@ footer{border-top:1px solid var(--border);padding:64px 0 32px}
 
       <!-- BIM -->
       <div class="product-row pc-violet" data-r>
-        <div class="product-text">
-          <div class="product-icon">🏗️</div>
-          <div class="product-name">CMXPro-BIM</div>
-          <p class="product-desc">Revit plugin for HVAC duct design. The only tool specialized in octagonal MPU ducts — a technical niche nobody else covers.</p>
-          <div class="product-features">
-            <div class="pf"><span class="pf-check">✓</span>Octagonal MPU duct design</div>
-            <div class="pf"><span class="pf-check">✓</span>Native Revit integration</div>
-            <div class="pf"><span class="pf-check">✓</span>Automated duct quantification</div>
-            <div class="pf"><span class="pf-check">✓</span>SMACNA & NBR 16401 compliant</div>
+        <div class="product-header">
+          <div class="product-text">
+            <div class="product-name">Revit, supercharged<br>for HVAC.</div>
           </div>
-          <div class="product-tags">
-            <span class="ptag">C#</span><span class="ptag">.NET</span><span class="ptag">Revit API</span><span class="ptag">WPF</span>
+          <div class="product-right">
+            <p class="product-desc">The only Revit plugin specialized in octagonal MPU ducts. Automated quantification, SMACNA & NBR 16401 compliant. 63K+ lines of C#.</p>
+            <a href="#pricing" class="product-link">3.0 CMXPro-BIM →</a>
           </div>
-          <a href="#pricing" class="product-cta">View pricing <span>→</span></a>
         </div>
         <div class="product-visual">
           <div class="glow"></div>
-          <div style="width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--t3);letter-spacing:1px">Screenshot coming soon</div>
+          <div style="width:100%;aspect-ratio:16/9;background:var(--surface);border-radius:12px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--t3)">Screenshot coming soon</div>
         </div>
       </div>
 
       <!-- AI Agents -->
-      <div class="product-row reverse pc-blue" data-r>
-        <div class="product-text">
-          <div class="product-icon">🤖</div>
-          <div class="product-name">AI Agent Platform</div>
-          <p class="product-desc">Custom AI agents running 24/7. Automate content pipelines, monitoring, social media, email triage — anything that can be systematized.</p>
-          <div class="product-features">
-            <div class="pf"><span class="pf-check">✓</span>24/7 autonomous operation</div>
-            <div class="pf"><span class="pf-check">✓</span>Multi-channel: email, social, Telegram</div>
-            <div class="pf"><span class="pf-check">✓</span>Content pipeline automation</div>
-            <div class="pf"><span class="pf-check">✓</span>Custom agent development</div>
+      <div class="product-row pc-blue" data-r>
+        <div class="product-header">
+          <div class="product-text">
+            <div class="product-name">Agents that run<br>while you sleep.</div>
           </div>
-          <div class="product-tags">
-            <span class="ptag">OpenClaw</span><span class="ptag">Claude</span><span class="ptag">Python</span><span class="ptag">Docker</span>
+          <div class="product-right">
+            <p class="product-desc">Custom AI agents running 24/7. Automate content pipelines, monitoring, social media, email triage — anything that can be systematized.</p>
+            <a href="mailto:hello@nesken.dev" class="product-link">4.0 AI Platform →</a>
           </div>
-          <a href="mailto:hello@nesken.dev" class="product-cta">Contact sales <span>→</span></a>
         </div>
         <div class="product-visual">
           <div class="glow"></div>
-          <div style="width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--t3);letter-spacing:1px">Screenshot coming soon</div>
+          <div style="width:100%;aspect-ratio:16/9;background:var(--surface);border-radius:12px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--t3)">Screenshot coming soon</div>
         </div>
       </div>
     </div>
