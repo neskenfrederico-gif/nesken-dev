@@ -110,9 +110,18 @@ section{padding:120px 0}
 .product-cta:hover{gap:14px}
 .product-link{font-size:14px;color:var(--t2);margin-top:16px;display:inline-flex;align-items:center;gap:6px;transition:color .2s}
 .product-link:hover{color:var(--t1)}
-.product-visual{position:relative;margin-top:64px}
-.product-visual img{width:100%;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);transition:transform .6s ease,box-shadow .6s ease}
-.product-row:hover .product-visual img{transform:translateY(-4px);box-shadow:0 48px 140px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.1)}
+.product-visual{position:relative;margin-top:64px;perspective:2000px}
+.cascade{position:relative;width:100%;padding-bottom:56%}
+.cascade img{position:absolute;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);transition:all .6s ease}
+.cascade .c1{width:88%;top:0;left:6%;z-index:3}
+.cascade .c2{width:72%;top:8%;left:0;z-index:2;opacity:.6;filter:brightness(.7)}
+.cascade .c3{width:72%;top:8%;right:0;left:auto;z-index:1;opacity:.5;filter:brightness(.6)}
+.product-row:hover .cascade .c1{transform:translateY(-6px);box-shadow:0 48px 140px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.1)}
+.product-row:hover .cascade .c2{opacity:.75;transform:translateX(-8px)}
+.product-row:hover .cascade .c3{opacity:.65;transform:translateX(8px)}
+/* Fallback for single image */
+.product-visual>img{width:100%;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);transition:all .6s ease}
+.product-row:hover .product-visual>img{transform:translateY(-4px);box-shadow:0 48px 140px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.1)}
 .product-visual .glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70%;height:70%;border-radius:50%;filter:blur(120px);pointer-events:none;opacity:.15;z-index:-1}
 
 /* Color themes */
@@ -316,7 +325,10 @@ footer{border-top:1px solid var(--border);padding:64px 0 32px}
         </div>
         <div class="product-visual">
           <div class="glow"></div>
-          <img src="mockups/cmxpro.png" alt="CMXPro Suite">
+          <div class="cascade">
+            <img src="mockups/cmxpro-ducts.png" alt="Duct Design" class="c2">
+            <img src="mockups/cmxpro.png" alt="CMXPro Dashboard" class="c1">
+          </div>
         </div>
       </div>
 
@@ -333,7 +345,10 @@ footer{border-top:1px solid var(--border);padding:64px 0 32px}
         </div>
         <div class="product-visual">
           <div class="glow"></div>
-          <img src="mockups/fluxo.png" alt="Qotr">
+          <div class="cascade">
+            <img src="mockups/qotr-proposals.png" alt="Proposals" class="c2">
+            <img src="mockups/qotr.png" alt="Qotr Dashboard" class="c1">
+          </div>
         </div>
       </div>
 

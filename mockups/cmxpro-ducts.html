@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1280px;height:800px;font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;overflow:hidden}
+.app{display:grid;grid-template-columns:240px 1fr;height:100%}
+.sidebar{background:#0d0d0d;border-right:1px solid rgba(255,255,255,.06);padding:20px 0}
+.sidebar-logo{padding:0 20px;font-size:18px;font-weight:800;letter-spacing:-.5px;margin-bottom:28px;display:flex;align-items:center;gap:10px}
+.sidebar-logo .dot{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#ff6b2b,#ff8f5c);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.nav-item{padding:9px 20px;font-size:13px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:10px}
+.nav-item.active{color:#fff;background:rgba(255,255,255,.04);border-right:2px solid #3b82f6}
+.nav-section{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.2);padding:16px 20px 6px}
+.main{display:flex;flex-direction:column}
+.topbar{padding:16px 28px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center}
+.topbar h2{font-size:16px;font-weight:700}
+.content{padding:28px;flex:1;display:grid;grid-template-columns:1fr 320px;gap:20px;overflow:hidden}
+/* SVG duct diagram */
+.duct-area{background:#111;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:20px;position:relative;overflow:hidden}
+.duct-title{font-size:12px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px}
+.duct-svg{width:100%;height:calc(100% - 30px)}
+/* Properties panel */
+.props{display:flex;flex-direction:column;gap:12px}
+.prop-card{background:#111;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:18px}
+.prop-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.prop-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:12px}
+.prop-label{color:rgba(255,255,255,.4)}
+.prop-val{color:#fff;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px}
+.prop-val.blue{color:#3b82f6}
+.prop-val.green{color:#10b981}
+.prop-val.orange{color:#ff6b2b}
+.btn-calc{width:100%;padding:10px;background:#3b82f6;border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:600;margin-top:8px;cursor:pointer}
+.result-card{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:14px;padding:18px}
+.result-card .prop-title{color:#3b82f6}
+</style></head><body>
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo"><div class="dot">C</div>CMXPro Suite</div>
+    <div class="nav-section">Project</div>
+    <div class="nav-item">📊 Dashboard</div>
+    <div class="nav-item active">📐 Duct Design</div>
+    <div class="nav-item">❄️ Thermal Load</div>
+    <div class="nav-item">🌡️ Psychrometric</div>
+    <div class="nav-section">Calculation</div>
+    <div class="nav-item">📋 Spaces</div>
+    <div class="nav-item">🔧 Equipment</div>
+    <div class="nav-item">📄 Reports</div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <h2>Duct Design — Zone A (Clean Room ISO 7)</h2>
+      <div style="display:flex;gap:8px">
+        <div style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.5)">Export DWG</div>
+        <div style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;background:#3b82f6;color:#fff">Calculate All</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="duct-area">
+        <div class="duct-title">Duct Layout — Equal Friction Method</div>
+        <svg viewBox="0 0 700 420" class="duct-svg">
+          <!-- Main trunk -->
+          <rect x="50" y="180" width="600" height="40" rx="4" fill="rgba(59,130,246,.15)" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="350" y="205" fill="#3b82f6" font-size="11" text-anchor="middle" font-weight="600">Main Trunk — 800×400mm — 12 m/s</text>
+          <!-- Branches -->
+          <rect x="150" y="100" width="30" height="80" rx="3" fill="rgba(16,185,129,.12)" stroke="#10b981" stroke-width="1"/>
+          <text x="165" y="90" fill="#10b981" font-size="9" text-anchor="middle" font-weight="500">Branch 1</text>
+          <text x="165" y="75" fill="rgba(255,255,255,.3)" font-size="8" text-anchor="middle">400×200</text>
+          
+          <rect x="300" y="100" width="30" height="80" rx="3" fill="rgba(16,185,129,.12)" stroke="#10b981" stroke-width="1"/>
+          <text x="315" y="90" fill="#10b981" font-size="9" text-anchor="middle" font-weight="500">Branch 2</text>
+          <text x="315" y="75" fill="rgba(255,255,255,.3)" font-size="8" text-anchor="middle">350×200</text>
+          
+          <rect x="450" y="100" width="30" height="80" rx="3" fill="rgba(16,185,129,.12)" stroke="#10b981" stroke-width="1"/>
+          <text x="465" y="90" fill="#10b981" font-size="9" text-anchor="middle" font-weight="500">Branch 3</text>
+          <text x="465" y="75" fill="rgba(255,255,255,.3)" font-size="8" text-anchor="middle">300×150</text>
+          
+          <rect x="580" y="100" width="30" height="80" rx="3" fill="rgba(16,185,129,.12)" stroke="#10b981" stroke-width="1"/>
+          <text x="595" y="90" fill="#10b981" font-size="9" text-anchor="middle" font-weight="500">Branch 4</text>
+          <text x="595" y="75" fill="rgba(255,255,255,.3)" font-size="8" text-anchor="middle">250×150</text>
+          
+          <!-- Diffusers -->
+          <circle cx="165" cy="60" r="12" fill="rgba(255,107,43,.12)" stroke="#ff6b2b" stroke-width="1"/>
+          <text x="165" y="64" fill="#ff6b2b" font-size="8" text-anchor="middle" font-weight="600">D1</text>
+          <circle cx="315" cy="60" r="12" fill="rgba(255,107,43,.12)" stroke="#ff6b2b" stroke-width="1"/>
+          <text x="315" y="64" fill="#ff6b2b" font-size="8" text-anchor="middle" font-weight="600">D2</text>
+          <circle cx="465" cy="60" r="12" fill="rgba(255,107,43,.12)" stroke="#ff6b2b" stroke-width="1"/>
+          <text x="465" y="64" fill="#ff6b2b" font-size="8" text-anchor="middle" font-weight="600">D3</text>
+          <circle cx="595" cy="60" r="12" fill="rgba(255,107,43,.12)" stroke="#ff6b2b" stroke-width="1"/>
+          <text x="595" y="64" fill="#ff6b2b" font-size="8" text-anchor="middle" font-weight="600">D4</text>
+          
+          <!-- Return duct -->
+          <rect x="50" y="260" width="450" height="30" rx="4" fill="rgba(139,92,246,.1)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="275" y="280" fill="#8b5cf6" font-size="10" text-anchor="middle" font-weight="600">Return Duct — 600×300mm</text>
+          
+          <!-- AHU -->
+          <rect x="10" y="165" width="40" height="140" rx="6" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+          <text x="30" y="240" fill="rgba(255,255,255,.5)" font-size="9" text-anchor="middle" font-weight="700" transform="rotate(-90,30,240)">AHU-01</text>
+          
+          <!-- Pressure labels -->
+          <text x="200" y="330" fill="rgba(255,255,255,.2)" font-size="9">ΔP: 1.2 Pa/m</text>
+          <text x="400" y="330" fill="rgba(255,255,255,.2)" font-size="9">Total: 245 Pa</text>
+          <text x="200" y="350" fill="rgba(255,255,255,.2)" font-size="9">Flow: 8,400 m³/h</text>
+          <text x="400" y="350" fill="rgba(255,255,255,.2)" font-size="9">Velocity: 8-12 m/s</text>
+        </svg>
+      </div>
+      <div class="props">
+        <div class="prop-card">
+          <div class="prop-title">Selected: Branch 2</div>
+          <div class="prop-row"><span class="prop-label">Width</span><span class="prop-val">350 mm</span></div>
+          <div class="prop-row"><span class="prop-label">Height</span><span class="prop-val">200 mm</span></div>
+          <div class="prop-row"><span class="prop-label">Length</span><span class="prop-val">4.5 m</span></div>
+          <div class="prop-row"><span class="prop-label">Flow Rate</span><span class="prop-val blue">1,800 m³/h</span></div>
+          <div class="prop-row"><span class="prop-label">Velocity</span><span class="prop-val green">7.1 m/s</span></div>
+          <div class="prop-row"><span class="prop-label">ΔP/m</span><span class="prop-val orange">0.98 Pa/m</span></div>
+          <button class="btn-calc">Recalculate Section</button>
+        </div>
+        <div class="result-card">
+          <div class="prop-title">System Summary</div>
+          <div class="prop-row"><span class="prop-label">Total Flow</span><span class="prop-val">8,400 m³/h</span></div>
+          <div class="prop-row"><span class="prop-label">Total ΔP</span><span class="prop-val blue">245 Pa</span></div>
+          <div class="prop-row"><span class="prop-label">Fan Power</span><span class="prop-val orange">3.2 kW</span></div>
+          <div class="prop-row"><span class="prop-label">Sections</span><span class="prop-val">12</span></div>
+          <div class="prop-row"><span class="prop-label">Status</span><span class="prop-val green">✓ OK</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

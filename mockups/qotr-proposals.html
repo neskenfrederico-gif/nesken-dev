@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1280px;height:800px;font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;overflow:hidden}
+.app{display:grid;grid-template-columns:220px 1fr;height:100%}
+.sidebar{background:#0d0d0d;border-right:1px solid rgba(255,255,255,.06);padding:20px 0}
+.sidebar-logo{padding:0 20px;font-size:16px;font-weight:800;letter-spacing:-.5px;margin-bottom:28px;display:flex;align-items:center;gap:10px}
+.sidebar-logo .icon{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#10b981,#059669);display:flex;align-items:center;justify-content:center;font-size:14px}
+.nav-item{padding:9px 20px;font-size:13px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:10px}
+.nav-item.active{color:#fff;background:rgba(255,255,255,.04);border-right:2px solid #10b981}
+.main{display:flex;flex-direction:column}
+.topbar{padding:16px 28px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center}
+.topbar h2{font-size:16px;font-weight:700}
+.content{padding:28px;flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 380px;gap:20px}
+/* Proposal editor */
+.editor{background:#111;border:1px solid rgba(255,255,255,.05);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.editor-bar{padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.02)}
+.editor-bar span{font-size:12px;font-weight:600;color:rgba(255,255,255,.5)}
+.editor-tabs{display:flex;gap:16px}
+.editor-tab{font-size:11px;font-weight:600;color:rgba(255,255,255,.3);padding:4px 0;cursor:pointer}
+.editor-tab.active{color:#10b981;border-bottom:2px solid #10b981}
+.editor-body{padding:24px;flex:1;font-size:13px;line-height:2;color:rgba(255,255,255,.6);overflow:hidden}
+.editor-body h3{color:#fff;font-size:16px;font-weight:700;margin:16px 0 8px;letter-spacing:-.3px}
+.editor-body h3:first-child{margin-top:0}
+.editor-body .highlight{background:rgba(16,185,129,.08);border-left:3px solid #10b981;padding:8px 12px;border-radius:0 8px 8px 0;margin:8px 0;font-size:12px}
+.editor-body table{width:100%;border-collapse:collapse;margin:12px 0;font-size:11px}
+.editor-body th{text-align:left;padding:8px;border-bottom:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px;font-size:10px}
+.editor-body td{padding:8px;border-bottom:1px solid rgba(255,255,255,.03);color:rgba(255,255,255,.5)}
+.editor-body td:last-child{text-align:right;font-family:'JetBrains Mono',monospace;color:#10b981;font-weight:600}
+.total-row td{border-top:2px solid rgba(255,255,255,.1)!important;font-weight:700;color:#fff!important;font-size:13px}
+/* Side panel */
+.side{display:flex;flex-direction:column;gap:12px}
+.side-card{background:#111;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:18px}
+.side-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.client-name{font-size:18px;font-weight:800;margin-bottom:4px}
+.client-info{font-size:12px;color:rgba(255,255,255,.4);line-height:1.6}
+.status-bar{display:flex;gap:8px;margin-top:12px}
+.status-tag{font-size:10px;font-weight:600;padding:4px 10px;border-radius:100px}
+.tag-sent{background:rgba(59,130,246,.1);color:#3b82f6}
+.tag-reviewed{background:rgba(16,185,129,.1);color:#10b981}
+.ai-box{background:rgba(16,185,129,.04);border:1px solid rgba(16,185,129,.12);border-radius:12px;padding:14px;font-size:12px;color:rgba(255,255,255,.5);line-height:1.6}
+.ai-label{font-size:10px;font-weight:700;color:#10b981;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.timeline{display:flex;flex-direction:column;gap:10px}
+.tl-item{display:flex;gap:10px;align-items:flex-start;font-size:11px;color:rgba(255,255,255,.4)}
+.tl-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);margin-top:4px;flex-shrink:0}
+.tl-dot.active{background:#10b981}
+.tl-dot.blue{background:#3b82f6}
+</style></head><body>
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo"><div class="icon">Q</div>Qotr</div>
+    <div class="nav-item">📊 Dashboard</div>
+    <div class="nav-item">📋 Budgets</div>
+    <div class="nav-item active">📄 Proposals</div>
+    <div class="nav-item">👥 Clients</div>
+    <div class="nav-item">🤖 AI Assistant</div>
+    <div class="nav-item">💰 Finance</div>
+    <div class="nav-item">📈 Reports</div>
+    <div class="nav-item">⚙️ Settings</div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <h2>Proposal #247 — Achê Farmacêutica</h2>
+      <div style="display:flex;gap:8px">
+        <div style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.5)">Preview PDF</div>
+        <div style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;background:#10b981;color:#fff">Send to Client</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="editor">
+        <div class="editor-bar">
+          <span>Proposal Editor</span>
+          <div class="editor-tabs">
+            <div class="editor-tab active">Content</div>
+            <div class="editor-tab">Pricing</div>
+            <div class="editor-tab">Terms</div>
+          </div>
+        </div>
+        <div class="editor-body">
+          <h3>HVAC System — Clean Room Facility</h3>
+          <p>Complete HVAC system design, supply, and installation for the pharmaceutical production area at Achê Farmacêutica, Anápolis-GO.</p>
+          <div class="highlight">🤖 AI Analysis: This project requires ISO 7 clean room specs with 20-25 ACH. Recommended: 4x AHU with HEPA filtration + redundant chiller.</div>
+          <h3>Scope of Work</h3>
+          <table>
+            <tr><th>Item</th><th>Description</th><th>Value</th></tr>
+            <tr><td>1</td><td>HVAC Engineering Design</td><td>R$ 85,000</td></tr>
+            <tr><td>2</td><td>Equipment Supply (4x AHU + Chiller)</td><td>R$ 245,000</td></tr>
+            <tr><td>3</td><td>Ductwork & Insulation</td><td>R$ 78,000</td></tr>
+            <tr><td>4</td><td>Installation & Commissioning</td><td>R$ 52,000</td></tr>
+            <tr><td>5</td><td>Automation (BMS Integration)</td><td>R$ 25,000</td></tr>
+            <tr class="total-row"><td></td><td>Total</td><td>R$ 485,000</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="side">
+        <div class="side-card">
+          <div class="side-title">Client</div>
+          <div class="client-name">Achê Farmacêutica</div>
+          <div class="client-info">Contact: Dr. Ricardo Mendes<br>Anápolis, GO — Since 2019<br>5 projects completed</div>
+          <div class="status-bar"><span class="status-tag tag-sent">Sent</span><span class="status-tag tag-reviewed">Client Reviewed</span></div>
+        </div>
+        <div class="side-card">
+          <div class="side-title">AI Insights</div>
+          <div class="ai-box">
+            <div class="ai-label">🤖 Claude AI</div>
+            Based on similar clean room projects (Hospital Regional, Cargill), pricing is 8% below market average. Consider adjusting Item 4 (Installation) by +R$6,000 for crane rental needed in Area B.
+          </div>
+        </div>
+        <div class="side-card">
+          <div class="side-title">Timeline</div>
+          <div class="timeline">
+            <div class="tl-item"><div class="tl-dot active"></div>Created — Mar 12</div>
+            <div class="tl-item"><div class="tl-dot active"></div>AI Review — Mar 12</div>
+            <div class="tl-item"><div class="tl-dot blue"></div>Sent to Client — Mar 14</div>
+            <div class="tl-item"><div class="tl-dot active"></div>Client Opened — Mar 15</div>
+            <div class="tl-item"><div class="tl-dot"></div>Awaiting Approval</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>
